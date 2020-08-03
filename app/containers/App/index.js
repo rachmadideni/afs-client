@@ -1,9 +1,9 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import { Redirect, Route, Switch } from 'react-router-dom';
+import GlobalStyle from '../../global-styles';
 
-import Container from '@material-ui/core/Container';
-
+import AppContainer from "components/AppContainer";
 import AuthGuard from 'containers/AuthGuard';
 import CreatePassword from 'containers/CreatePassword/Loadable';
 import Dashboard from 'containers/Dashboard/Loadable';
@@ -14,26 +14,18 @@ import VerifyConfirmPage from 'containers/VerifyConfirmPage';
 import ForgotPassword from "containers/ForgotPassword";
 import UserRegistration from "../UserRegistration/Loadable";
 
-import styled from 'styled-components';
-import GlobalStyle from '../../global-styles';
-
-const AppWrapper = styled.div`
-  width: 100%;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-`;
+import "./styles.scss";
 
 export default function App() {
   return (
-    <AppWrapper>
+    <div className="appWrapper">
       <Helmet
         titleTemplate="%s - Pembiayaan Amanah"
         defaultTitle="Pembiayaan Amanah"
       >
         <meta name="description" content="Pembiayaan Amanah" />
       </Helmet>
-      <Container maxWidth="xs" style={{ paddingLeft: 0, paddingRight: 0 }}>
+      <AppContainer>
         <Switch>
           
           <Route 
@@ -151,8 +143,8 @@ export default function App() {
 
           <Route path="" component={NotFoundPage} />
         </Switch>
-      </Container>
+      </AppContainer>
       <GlobalStyle />
-    </AppWrapper>
+    </div>
   );
 }
