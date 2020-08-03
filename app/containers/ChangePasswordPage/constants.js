@@ -1,0 +1,14 @@
+/*
+ *
+ * ChangePasswordPage constants
+ *
+ */
+
+export const DEFAULT_ACTION = 'app/ChangePasswordPage/DEFAULT_ACTION';
+
+export const CHANGE_OLD_PASSWORD_ACTION = 'app/ChangePasswordPage/CHANGE_OLD_PASSWORD_ACTION';
+export const CHANGE_NEW_PASSWORD_ACTION = 'app/ChangePasswordPage/CHANGE_NEW_PASSWORD_ACTION';
+export const CHANGE_NEW_PASSWORD_CONFIRM_ACTION = 'app/ChangePasswordPage/CHANGE_NEW_PASSWORD_CONFIRM_ACTION';
+export const SUBMIT_CHANGED_PASSWORD_ACTION = 'app/ChangePasswordPage/SUBMIT_CHANGED_PASSWORD_ACTION';
+export const SUBMIT_CHANGED_PASSWORD_SUCCESS_ACTION = 'app/ChangePasswordPage/SUBMIT_CHANGED_PASSWORD_SUCCESS_ACTION';
+export const SUBMIT_CHANGED_PASSWORD_ERROR_ACTION = 'app/ChangePasswordPage/SUBMIT_CHANGED_PASSWORD_ERROR_ACTION';
