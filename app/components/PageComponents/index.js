@@ -108,7 +108,7 @@ const StyledIconButton = styled(props => <IconButton classes={{ root:'root' }} {
 
 function PageAppBar({ appTitle, backHandler }){
   return (
-    <StyledAppBar>
+    <StyledAppBar position="sticky">
       <Toolbar>
         <StyledIconButton
           onClick={backHandler}>

@@ -1,0 +1,8 @@
+@import "../../styles/fonts.scss";
+@import "../../styles/colors.scss";
+
+.textField {
+  font-family: $font-family;
+  font-size:12px;  
+  text-transform: capitalize;
+}

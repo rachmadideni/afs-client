@@ -14,25 +14,27 @@ import { compose } from 'redux';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 
-import { makeStyles } from '@material-ui/core/styles';
-import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
-import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import IconButton from '@material-ui/core/IconButton';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
-import Backdrop from '@material-ui/core/Backdrop';
 
+import isEmpty from 'validator/lib/isEmpty';
+import { color, typography } from 'styles/constants';
+
+import AppBar from 'components/AppBar';
+import AppTitle from 'components/AppTitle';
+import AppBox from 'components/AppBox';
+import AppLoader from 'components/AppLoader';
+
+import Toolbar from 'components/AppToolbar';
+import TextField from 'components/TextField';
+import TextFieldPassword from 'components/TextFieldPassword';
 import NotificationSnackbar from 'components/NotificationSnackbar';
 import BtnCustom from 'components/BtnCustom';
 import PaperCustom from 'components/PaperCustom';
 
-import isEmpty from 'validator/lib/isEmpty';
-import { color, typography } from 'styles/constants';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
 import {
   resetInputAction,
   changeNikAction,
@@ -53,21 +55,7 @@ import {
   makeSelectIsLoading,
 } from './selectors';
 
-// import { Wrapper, AppTitle } from '../Verifikasi/components';
-import {
-  Wrapper,
-  AppTitle,
-} from 'components/PageComponents';
-
-const styles = makeStyles(() => ({
-  textField: {
-    fontFamily: typography.fontFamily,
-    fontSize: 12,
-    backgroundColor: color.grey,
-    borderRadius: 4,
-    textTransform: 'capitalize',
-  },
-}));
+import Wallpaper from 'components/Wallpaper';
 
 class Login extends React.Component {
   constructor(props) {
@@ -164,11 +152,11 @@ class Login extends React.Component {
     return history.replace('/verifikasi');
   };
 
-  // #region handle route changes 
-  handleRouteChanges = (route) => {
+  // #region handle route changes
+  handleRouteChanges = route => {
     const { history } = this.props;
     history.replace(route);
-  }
+  };
   // #endregion
 
   handleSubmit = evt => {
@@ -198,35 +186,21 @@ class Login extends React.Component {
     const { intl, credential, changeNik, changePassword } = this.props;
 
     return (
-      <Wrapper container wrap="nowrap" direction="column">
-        <AppBar
-          style={{
-            backgroundColor: 'transparent',
-            boxShadow: 'none',
-          }}
-        >
-          <Toolbar style={{ justifyContent: 'center' }}>
+      <Wallpaper>
+        <AppBar position="sticky">
+          <Toolbar>
             <AppTitle gutterBottom>
               {intl.formatMessage(messages.appTitle)}
             </AppTitle>
           </Toolbar>
         </AppBar>
-        <Box
-          display="flex"
-          width="100%"
-          height="100vh"
-          alignItems="center"
-          justifyContent="center"
-        >
-          <Backdrop
+
+        <AppBox>
+          <AppLoader
             open={this.props.isLoading}
-            style={{
-              zIndex: 3000,
-              color: color.white,
-            }}
-          >
-            <CircularProgress color="inherit" />
-          </Backdrop>
+            type="circular"
+            message="Mohon Tunggu"
+          />
 
           <NotificationSnackbar
             verticalPos="top"
@@ -284,7 +258,6 @@ class Login extends React.Component {
                 }}
                 error={!!this.state.error.nik}
                 helperText={this.state.error.nik}
-                className={styles.textField}
               />
 
               <TextField
@@ -322,6 +295,13 @@ class Login extends React.Component {
                 helperText={this.state.error.password}
               />
 
+              <TextFieldPassword
+                variant="outlined"
+                margin="dense"
+                fullWidth
+                label={intl.formatMessage(messages.password)}
+              />
+
               <BtnCustom
                 fullWidth
                 variant="contained"
@@ -335,15 +315,15 @@ class Login extends React.Component {
                 fullWidth
                 variant="outlined"
                 color="primary"
-                onClick={()=> this.handleRouteChanges('/registrasi')}
+                onClick={() => this.handleRouteChanges('/registrasi')}
                 title={intl.formatMessage(messages.registerButton)}
               />
-              
+
               <BtnCustom
                 fullWidth
                 variant="outlined"
                 color="primary"
-                onClick={()=> this.handleRouteChanges('/resetPassword')}
+                onClick={() => this.handleRouteChanges('/resetPassword')}
                 title={intl.formatMessage(messages.resetPasswordButton)}
               />
 
@@ -357,8 +337,8 @@ class Login extends React.Component {
               />
             </form>
           </PaperCustom>
-        </Box>
-      </Wrapper>
+        </AppBox>
+      </Wallpaper>
     );
   }
 }
@@ -407,5 +387,5 @@ export default compose(
   injectReducer({ key: 'login', reducer }),
   injectSaga({ key: 'saga', saga }),
   withConnect,
-  injectIntl,  
+  injectIntl,
 )(Login);

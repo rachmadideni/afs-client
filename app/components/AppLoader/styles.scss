@@ -1,0 +1,10 @@
+@import "../../styles/colors.scss";
+
+.backdrop {
+  z-index:3000;
+  color:$white;
+}
+
+.gridBackdrop {
+  align-items: center;
+}
