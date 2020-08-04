@@ -13,7 +13,7 @@ import { compose } from 'redux';
 
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
-import { makeSelectUser, makeSelectError, makeSelectSuccess } from './selectors';
+import { makeSelectUser, makeSelectError, makeSelectSuccess, makeSelectIsLoading } from './selectors';
 import { changeInputAction, registrasi, clearError, clearSuccess, mintaKodeAktifasi } from './actions';
 import reducer from './reducer';
 import saga from './saga';
@@ -24,6 +24,9 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 import { ArrowForward } from '@material-ui/icons';
+
+import AppBox from 'components/AppBox';
+import AppLoader from 'components/AppLoader';
 
 import {
   Wrapper,
@@ -205,12 +208,12 @@ class UserRegistration extends React.Component {
           appTitle="Login"
           backHandler={() => this.handleBack()}
         />
-        <Box
-          display="flex"
-          width="100%"
-          alignItems="center"
-          justifyContent="center"
-        >
+        <AppBox>
+          <AppLoader
+            open={this.props.isLoading}
+            type="circular"
+            message="Mohon Tunggu"
+          />
           <NotificationSnackbar
             verticalPos="top"
             open={this.state.isErrorNotification}
@@ -345,7 +348,7 @@ class UserRegistration extends React.Component {
               title={intl.formatMessage(messages.btnVerifikasi)}
             />
           </PaperCustom>
-        </Box>
+        </AppBox>
       </Wrapper>
     );
   }
@@ -358,7 +361,8 @@ UserRegistration.propTypes = {
 const mapStateToProps = createStructuredSelector({  
   user: makeSelectUser(),
   error: makeSelectError(),
-  success: makeSelectSuccess()
+  success: makeSelectSuccess(),
+  isLoading: makeSelectIsLoading()
 });
 
 function mapDispatchToProps(dispatch) {

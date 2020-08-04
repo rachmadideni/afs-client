@@ -10,10 +10,10 @@ const makeSelectUserRegistration = () =>
     substate => substate,
   );
 
-
 const makeSelectUser = () => createSelector(selectUserRegistrationDomain, substate => substate.user);
 const makeSelectError = () => createSelector(selectUserRegistrationDomain, substate => substate.error);
 const makeSelectSuccess = () => createSelector(selectUserRegistrationDomain, substate => substate.success);
 const makeSelectKodeAktifasi = () => createSelector(selectUserRegistrationDomain, substate => substate.kode_aktifasi);
+const makeSelectIsLoading = () => createSelector(selectUserRegistrationDomain, substate => substate.isLoading);
 export default makeSelectUserRegistration;
-export { selectUserRegistrationDomain, makeSelectUser, makeSelectError, makeSelectSuccess, makeSelectKodeAktifasi };
+export { selectUserRegistrationDomain, makeSelectUser, makeSelectError, makeSelectSuccess, makeSelectKodeAktifasi, makeSelectIsLoading };
