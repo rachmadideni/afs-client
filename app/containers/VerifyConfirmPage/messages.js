@@ -11,11 +11,11 @@ export const scope = 'app.containers.VerifyConfirmPage';
 export default defineMessages({
   header: {
     id: `${scope}.header`,
-    defaultMessage: 'Konfirmasi kode',
+    defaultMessage: 'Konfirmasi kode Aktifasi',
   },
   subtitle: {
     id: `${scope}.subtitle`,
-    defaultMessage: 'silahkan cek kode di email anda dan inputkan pada textbox dibawah.',
+    defaultMessage: 'silahkan cek kode Aktifasi di email anda dan inputkan pada textbox dibawah.',
   },
   kodeAktifasi: {
     id: `${scope}.kodeAktifasi`,
@@ -35,7 +35,7 @@ export default defineMessages({
   },
   codeIsMatch: {
     id: `${scope}.codeIsMatch`,
-    defaultMessage: 'kode verifikasi sesuai. mohon tunggu',
+    defaultMessage: 'kode Aktifasi sesuai. mohon tunggu',
   },
   tokenExpired: {
     id: `${scope}.tokenExpired`,
