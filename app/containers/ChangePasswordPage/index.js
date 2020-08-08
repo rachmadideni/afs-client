@@ -50,6 +50,8 @@ const Wrapper = styled(props => <Grid {...props}>{props.children}</Grid>)`
     justify-content: center;
     align-items: flex-start;
     background-color: ${color.white};
+    padding-left:15px;
+    padding-right:15px;
   }
 `;
 
