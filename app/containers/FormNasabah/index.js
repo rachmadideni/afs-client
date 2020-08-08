@@ -1,9 +1,3 @@
-/**
- *
- * FormNasabah
- *
- */
-
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -26,12 +20,14 @@ import {
 
 import styled from 'styled-components';
 import Grid from '@material-ui/core/Grid';
-import FormControl from '@material-ui/core/FormControl';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import TextField from '@material-ui/core/TextField';
-import InputLabel from '@material-ui/core/InputLabel';
-import Select from '@material-ui/core/Select';
+import TextField from "components/TextField";
 import MenuItem from '@material-ui/core/MenuItem';
+
+// import FormControl from '@material-ui/core/FormControl';
+// import FormHelperText from '@material-ui/core/FormHelperText';
+// import TextField from '@material-ui/core/TextField';
+// import InputLabel from '@material-ui/core/InputLabel';
+// import Select from '@material-ui/core/Select';
 // import Button from '@material-ui/core/Button';
 
 import validate from 'validate.js';
@@ -67,20 +63,14 @@ const Wrapper = styled(props => <Grid {...props} />)`
 class FormNasabah extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      // fullname:'',
-      // birthplace:'',
-      // birthdate:'',
-      // address:'',
-      // gender:'',
+    this.state = {      
       error: {
         fullname: null,
         birthplace: null,
         birthdate: null,
         address: null,
         gender: null,
-      },
-      // isSubmitTriggered: false,
+      }      
     };
     this.onInputChange = this.onInputChange.bind(this);
   }
@@ -133,57 +123,12 @@ class FormNasabah extends React.Component {
     return !isError;
   };
 
-  // handleSubmit = evt => {
-  //   evt.preventDefault();
-  //   const { fullname, birthplace, birthdate, address, gender } = this.state;
-
-  //   this.setState(prevState => ({
-  //     ...prevState,
-  //     isSubmitTriggered: true,
-  //   }));
-
-  //   if (
-  //     this.validateInput(fullname, 'fullname') &&
-  //     this.validateInput(birthplace, 'birthplace') &&
-  //     this.validateInput(birthdate, 'birthdate') &&
-  //     this.validateInput(address, 'address') &&
-  //     this.validateInput(gender, 'gender')
-  //   ) {
-  //     // TODO: CALL API TO SAVE DATA
-  //     // console.log('the form is clean and is submitted to the server!');
-  //      return this.props.setNasabah({
-  //       fullname,
-  //       birthplace,
-  //       birthdate,
-  //       address,
-  //       gender,
-  //     });
-  //     // return true;
-  //   }
-  //   return false;
-  // };
-
-  // testValidasi = evt => {
-  //   evt.preventDefault();
-  //   this.props.changeTriggered(true);
-  //   if (
-  //     this.props.validateInput('fullname', this.props.fullname) &&
-  //     this.props.validateInput('birthplace', this.props.birthplace) &&
-  //     this.props.validateInput('birthdate', this.props.birthdate) &&
-  //     this.props.validateInput('address', this.props.address) &&
-  //     this.props.validateInput('gender', this.props.gender)
-  //   ) {
-  //   }
-
-  //   return false;
-  // };
-
   renderOpsiJenkel = () => {
     const { opsiJenkel } = this.props;
     const opsi = opsiJenkel.length > 0 ? opsiJenkel : JENKEL;
-    return opsi.map(item => (
+    return opsi.map((item,i) => (
       <MenuItem
-        key={`item-jenkel-${item.ID}`}
+        key={`item-jenkel-${i}-${item.ID}`}
         value={item.ID}
         style={{ textTransform: 'lowercase' }}
       >
@@ -208,14 +153,14 @@ class FormNasabah extends React.Component {
       <Wrapper container wrap="nowrap" direction="column" alignItems="center">
         <Grid item>
           <form autoComplete="off">
-            <FormControl variant="outlined" margin="dense" fullWidth>
+            
               <TextField
                 id="nmlgkp"
                 name="nmlgkp"
                 color="secondary"
-                fullWidth
-                InputLabelProps={{ shrink: true }}
+                fullWidth                
                 variant="outlined"
+                InputLabelProps={{ shrink: true }}
                 label={intl.formatMessage(messages.fullName)}
                 margin="dense"
                 value={this.props.fullname}
@@ -228,8 +173,7 @@ class FormNasabah extends React.Component {
                 error={!!this.props.errorFullname}
                 helperText={this.props.errorFullname}
               />
-            </FormControl>
-            <FormControl variant="outlined" margin="dense" fullWidth>
+            
               <TextField
                 id="tptlhr"
                 name="tptlhr"
@@ -252,22 +196,17 @@ class FormNasabah extends React.Component {
                 error={!!this.props.errorBirthplace}
                 helperText={this.props.errorBirthplace}
               />
-            </FormControl>
-            <FormControl
-              variant="outlined"
-              margin="dense"
-              fullWidth
-              error={!!this.props.errorBirthdate}
-            >
+            
               <TextField
                 id="tgllhr"
                 name="tgllhr"
                 type="date"
+                min="1997-01-01"
+                max="2020-08-05"
                 fullWidth
                 color="secondary"
-                InputLabelProps={{ shrink: true }}
-                label={intl.formatMessage(messages.birthDate)}
-                labelwidth={110}
+                InputLabelProps={{ shrink: true }}                
+                label={intl.formatMessage(messages.birthDate)}                
                 variant="outlined"
                 margin="dense"
                 value={this.props.birthdate}
@@ -280,8 +219,7 @@ class FormNasabah extends React.Component {
                 error={!!this.props.errorBirthdate}
                 helperText={this.props.errorBirthdate}
               />
-            </FormControl>
-            <FormControl variant="outlined" fullWidth>
+            
               <TextField
                 id="alamt1"
                 name="alamt1"
@@ -301,13 +239,9 @@ class FormNasabah extends React.Component {
                 error={!!this.props.errorAddress}
                 helperText={this.props.errorAddress}
               />
-            </FormControl>
-            <FormControl
-              variant="outlined"
-              margin="dense"
-              fullWidth
-              error={!!this.props.errorGender}
-            >
+            
+           
+              {/* 
               <InputLabel color="secondary" shrink>
                 {intl.formatMessage(messages.gender)}
               </InputLabel>
@@ -334,10 +268,31 @@ class FormNasabah extends React.Component {
               >
                 {this.renderOpsiJenkel()}
               </Select>
-              <FormHelperText>{this.props.errorGender}</FormHelperText>
-            </FormControl>
+               */}
 
-            <FormControl variant="outlined" fullWidth>
+              <TextField
+                id="jenkel"
+                name="jenkel"
+                type="text"
+                select
+                variant="outlined"
+                fullWidth
+                margin="dense"
+                color="secondary"
+                InputLabelProps={{ shrink: true }}
+                label={intl.formatMessage(messages.gender)}
+                value={this.props.gender}
+                onChange={evt => {
+                  if (isTriggered) {
+                    this.props.validateInput('gender', evt.target.value);
+                  }
+                  return changeGender(evt.target.value);
+                }}
+                error={!!this.props.errorGender}
+                helpertext={this.props.errorGender}>
+                  {this.renderOpsiJenkel()}
+              </TextField>
+
               <TextField
                 id="mother_maiden_name"
                 name="mother_maiden_name"
@@ -359,8 +314,7 @@ class FormNasabah extends React.Component {
                 }}
                 error={!!this.props.errorMotherMaidenName}
                 helperText={this.props.errorMotherMaidenName}
-              />
-            </FormControl>
+              />            
           </form>
         </Grid>
       </Wrapper>
