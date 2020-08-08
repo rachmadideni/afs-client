@@ -49,12 +49,9 @@ import NumberInput from '../../components/NumberInput';
 import { FormItemHeaderText, FormItemText } from './components';
 
 import { color, typography } from '../../styles/constants';
-// Tour
-// import { TOUR_STEPS } from './constants';
-// import Tour from 'reactour';
 
 import { TourOpening } from '../../components/TourComponents';
-
+import { STEPS } from "../FormSubmissionStep";
 class PerhitunganAngsuran extends React.Component {
   constructor(props) {
     super(props);
@@ -71,6 +68,11 @@ class PerhitunganAngsuran extends React.Component {
       this.props.margin,
       this.props.tenor,
     );
+    // baca step terakhir yang sempat diisi oleh user 
+    if(this.props.activeStep > 0 && this.props.activeStep < 5){      
+      let route = STEPS.find(item => item.step === this.props.activeStep);
+      this.props.history.push(route.url);
+    }    
   }
 
   componentDidUpdate(prevProps) {
@@ -133,23 +135,24 @@ class PerhitunganAngsuran extends React.Component {
         container
         wrap="nowrap"
         direction="column"
-        alignItems="center"
-        style={{
+        alignItems="flex-start"
+        style={{          
           backgroundColor: 'transparent',
-        }}
-      >
-        {this.props.stepProgress === 0 && this.props.gaji === 0 ? (
+          paddingLeft:15,
+          paddingRight:15
+        }}>
+        {/*this.props.stepProgress === 0 && this.props.gaji === 0 ? (
           <TourOpening
             open={this.state.isOpen}
             onTourClose={this.handleBackdrop}
           />
-        ) : null}
-        <Grid
+        ) : null*/}
+        {/* <Grid
           item
           style={{
             marginTop: 10,
           }}
-        >
+        > */}
           <FormItemHeaderText>
             {intl.formatMessage(messages.pendapatanNet)}
           </FormItemHeaderText>
@@ -226,7 +229,7 @@ class PerhitunganAngsuran extends React.Component {
             </FormItemText>
           </Grid>
         </Grid>
-      </Grid>
+      // </Grid>
     );
   }
 }
