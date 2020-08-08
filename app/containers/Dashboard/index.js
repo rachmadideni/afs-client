@@ -1,16 +1,23 @@
 import React, { memo } from 'react';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Switch, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
+import injectReducer from 'utils/injectReducer';
+import reducer from './reducer';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
-import makeSelectDashboard from './selectors';
+import { makeSelectTourState, makeSelectTourDialogStart } from './selectors';
+import { toggleTour, toggleTourDialogStart } from "./actions";
 import { color } from '../../styles/constants';
 
 import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
+import AppBar from 'components/AppBar';
+import AppToolbar from 'components/AppToolbar';
+import AppHeaderIcon from "components/AppHeaderIcon";
+import AppHeaderNotification from "components/AppHeaderNotification";
+import AppHeaderSettings from "components/AppHeaderSettings";
+import BottomTabNavigation from 'components/BottomTabNavigation';
 
 // containers
 import FormSubmissionStep from 'containers/FormSubmissionStep';
@@ -20,12 +27,12 @@ import ChangePasswordPage from 'containers/ChangePasswordPage/Loadable';
 import FormAkadStep from 'containers/FormAkadStep/Loadable';
 import MainPage from 'containers/MainPage/Loadable';
 
-// components
-import BottomTabNavigation from 'components/BottomTabNavigation';
-import PaperCustom from 'components/PaperCustom';
-
 import bgDashboard from 'images/wave-red-bg.png';
+import afsImage from 'images/icon-512x512.png';
 import { TABS } from './constants';
+
+import ReactTour from "components/ReactTour";
+import DialogTourStart from "components/DialogTourStart"; 
 
 const Wrapper = styled(Grid)`
 && {
@@ -61,17 +68,24 @@ class Dashboard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      bottomTabValue: 0,//dashboard
+      bottomTabValue: 0, //dashboard      
     };
+  }
+
+  componentDidMount(){
+    // this.props.toggleTour(true);    
+    if(this.props.history.location.pathname === "/dashboard"){
+      this.props.toggleTourDialogStart(true);
+    }    
   }  
 
   handleBottomTabChange = (e, value) => {
     this.setState({
       bottomTabValue: value,
-    });    
+    });
 
     const { history } = this.props;
-    
+
     // dashboard
     if (value === 0) {
       return history.replace('/dashboard');
@@ -80,132 +94,142 @@ class Dashboard extends React.Component {
     // profil
     if (value === 1) {
       return history.replace('/profil');
-    }    
+    }
     return null;
   };
 
   getBottomTabs = () =>
-    TABS.map((tab,tabIndex) => ({
+    TABS.map((tab, tabIndex) => ({
       label: tab.label,
-      value: tabIndex,//tab.value
+      value: tabIndex, //tab.value
       icon: tab.icon,
     }));
+  
+  goToInbox = () => {
+    this.props.history.push('/inbox');
+  }
 
   render() {
     const { history } = this.props;
     return (
-      <Wrapper container wrap="nowrap" direction="column">
-        <Box
-          width="100%"
-          height="100%"
-          alignItems="flex-start"
-          justifyContent="flex-start"
-        >
-          <PaperCustom
-            width={90}
-            elevation={0}
-            style={{
-              // height: '85vh',
-              height:"100%",
-              boxShadow: '0px 1px 2px #EAEAEA',
-              opacity: 1,
-              marginTop: 15,
-              marginLeft: 15,
-              marginRight: 15,
-              overflowY: 'auto',
-            }}>
+      // <Wrapper container wrap="nowrap" direction="column">
+      <React.Fragment>
+        <DialogTourStart 
+          open={this.props.isTourDialogStart} 
+          onClose={()=>this.props.toggleTourDialogStart(false)}
+          onClickActionButton={()=>{
+            this.props.toggleTourDialogStart(false);
+            this.props.toggleTour(true);
+          }}
+          onRejectUserGuide={()=>{
+            this.props.toggleTourDialogStart(false);
+          }} />
+        <AppBar color="white" position="sticky" elevation={1}>
+          <AppToolbar style={{ justifyContent: 'flex-start' }}>
+            <AppHeaderIcon src={afsImage} />
+            <div style={{ flexGrow:1 }} />
+            <AppHeaderNotification 
+              count={1}
+              onClick={()=>this.goToInbox()} />
+            <AppHeaderSettings />                        
+          </AppToolbar>
+        </AppBar>
+        
+        <Switch>
+          <Route
+            path="/dashboard"
+            render={routeProps => (
+              <MainPage history={history} {...routeProps} />
+            )}
+          />
 
-            <Switch>
-              <Route
-                path="/dashboard"
-                render={routeProps => (
-                  <MainPage history={history} {...routeProps} />
-                )}
-              />
+          <Route
+            path="/dashboard/section:(pinjaman|informasi)"
+            render={routeProps => (
+              <MainPage history={history} {...routeProps} />
+            )}
+          />
 
-              <Route
-                path="/dashboard/section:(pinjaman|informasi)"
-                render={routeProps => (
-                  <MainPage history={history} {...routeProps} />
-                )}
-              />
+          <Route
+            path="/application-form/step/customer"
+            render={routeProps => (
+              <FormSubmissionStep history={history} {...routeProps} />
+            )}
+          />
 
-              <Route
-                path="/application-form/step/customer"
-                render={routeProps => (
-                  <FormSubmissionStep history={history} {...routeProps} />
-                )}
-              />
+          <Route
+            path="/application-form/step/customer/section:(installment|personal-details|work-history|documents|summary)"
+            render={routeProps => (
+              <FormSubmissionStep history={history} {...routeProps} />
+            )}
+          />
 
-              <Route
-                path="/application-form/step/customer/section:(installment|personal-details|work-history|documents|summary)"
-                render={routeProps => (
-                  <FormSubmissionStep history={history} {...routeProps} />
-                )}
-              />
+          <Route
+            path="/summary"
+            render={routeProps => (
+              <FormSummary history={history} {...routeProps} />
+            )}
+          />
 
-              <Route
-                path="/summary"
-                render={routeProps => (
-                  <FormSummary history={history} {...routeProps} />
-                )}
-              />
+          <Route
+            path="/akad"
+            render={routeProps => (
+              <FormAkadStep history={history} {...routeProps} />
+            )}
+          />
 
-              <Route
-                path="/akad"
-                render={routeProps => (
-                  <FormAkadStep history={history} {...routeProps} />
-                )}
-              />
+          <Route
+            path="/profil"
+            render={routeProps => (
+              <UserProfile history={history} {...routeProps} />
+            )}
+          />
 
-              <Route
-                path="/profil"
-                render={routeProps => (
-                  <UserProfile history={history} {...routeProps} />
-                )}
-              />
+          {/* <Route
+            path="/inbox"
+            render={routeProps => (
+              <UserInbox history={history} {...routeProps} />
+            )}
+          /> */}
 
-              {/* <Route
-                path="/inbox"
-                render={routeProps => (
-                  <UserInbox history={history} {...routeProps} />
-                )}
-              /> */}
-
-              <Route
-                path="/changePassword"
-                render={routeProps => (
-                  <ChangePasswordPage history={history} {...routeProps} />
-                )}
-              />
-            </Switch>
-
-            <BottomTabNavigation
-              tabs={this.getBottomTabs()}
-              bottomTabValue={this.state.bottomTabValue}
-              handleBottomTabChange={this.handleBottomTabChange}
-            />
-          </PaperCustom>
-        </Box>
-      </Wrapper>
+          <Route
+            path="/changePassword"
+            render={routeProps => (
+              <ChangePasswordPage history={history} {...routeProps} />
+            )}
+          />
+        </Switch>            
+        <BottomTabNavigation              
+          tabs={this.getBottomTabs()}
+          bottomTabValue={this.state.bottomTabValue}
+          handleBottomTabChange={this.handleBottomTabChange}
+        />
+        <>
+          <ReactTour 
+            isOpen={this.props.isTourOpen}            
+            onRequestClose={() => this.props.toggleTour(false)}
+            update={this.props.history.location.pathname}
+            updateDelay={1000} />
+        </>          
+      </React.Fragment>
+      // </Wrapper>
     );
   }
 }
 
-Dashboard.propTypes = {
-  history: PropTypes.object,
-  intl: PropTypes.object,
-};
-
 const mapStateToProps = createStructuredSelector({
-  dashboard: makeSelectDashboard(),
+  isTourOpen: makeSelectTourState(),
+  isTourDialogStart: makeSelectTourDialogStart()
 });
 
 function mapDispatchToProps(dispatch) {
   return {
-    dispatch,
+    toggleTour: (tourState) => dispatch(toggleTour(tourState)),
+    toggleTourDialogStart: (dialogState) => dispatch(toggleTourDialogStart(dialogState))
   };
 }
+
+const withReducer = injectReducer({ key: 'dashboard', reducer });
 
 const withConnect = connect(
   mapStateToProps,
@@ -213,6 +237,7 @@ const withConnect = connect(
 );
 
 export default compose(
+  withReducer,
   withConnect,
   injectIntl,
   memo,

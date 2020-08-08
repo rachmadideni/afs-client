@@ -11,6 +11,8 @@ import {
 } from '@material-ui/icons';
 
 export const DEFAULT_ACTION = 'app/Dashboard/DEFAULT_ACTION';
+export const TOGGLE_TOUR = 'app/Dashboard/TOGGLE_TOUR';
+export const TOGGLE_TOUR_DIALOG_START = 'app/Dashboard/TOGGLE_TOUR_DIALOG_START';
 
 export const TABS = [
   {
