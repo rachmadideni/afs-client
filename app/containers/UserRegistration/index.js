@@ -1,11 +1,4 @@
-/**
- *
- * UserRegistration
- *
- */
-
-import React, { memo } from 'react';
-import PropTypes from 'prop-types';
+import React from 'react';
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
@@ -19,7 +12,6 @@ import reducer from './reducer';
 import saga from './saga';
 import messages from './messages';
 
-import Box from '@material-ui/core/Box';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
@@ -56,20 +48,15 @@ class UserRegistration extends React.Component {
       isSuccessNotification: false
     };
   }
-  componentDidMount(){
-    // console.log(this.props.error.message);
-  }
 
   // #region error checking
   componentDidUpdate(prevProps){
     
-    if(!!this.props.error.message && prevProps.error.message === null){
-      console.log('error happens');
+    if(!!this.props.error.message && prevProps.error.message === null){      
       this.setState({
         isErrorNotification:true
       })      
-    } else if(!!prevProps.error.message && this.props.error.message === null){
-      console.log('clearing error log')
+    } else if(!!prevProps.error.message && this.props.error.message === null){      
       this.setState({
         isErrorNotification:false
       })
@@ -84,7 +71,6 @@ class UserRegistration extends React.Component {
         isSuccessNotification:false
       })
     }
-    console.log('component updated!')
   }
   // #endregion
 
@@ -353,10 +339,6 @@ class UserRegistration extends React.Component {
     );
   }
 }
-
-UserRegistration.propTypes = {
-  dispatch: PropTypes.func.isRequired,
-};
 
 const mapStateToProps = createStructuredSelector({  
   user: makeSelectUser(),
