@@ -11,20 +11,24 @@ import {
   makeSelectPassword,
   makeSelectPasswordConfirm,
   makeSelectError,
-  makeSelectSuccess
+  makeSelectSuccess,
+  makeSelectIsLoading
 } from './selectors';
 import saga from './saga';
 import reducer from './reducer';
 
-import Box from '@material-ui/core/Box';
-import TextField from '@material-ui/core/TextField';
+//import Box from '@material-ui/core/Box';
+// import TextField from '@material-ui/core/TextField';
+import TextField from "components/TextField";
 
 import {
   Wrapper,
-  PageAppBar,  
+  PageAppBar,
   PaperTitle,
   PaperSubtitle,
 } from 'components/PageComponents';
+import AppBox from 'components/AppBox';
+import AppLoader from 'components/AppLoader';
 import PaperCustom from 'components/PaperCustom';
 import BtnCustom from 'components/BtnCustom';
 import NotificationSnackbar from 'components/NotificationSnackbar';
@@ -33,7 +37,7 @@ import {
   changePasswordAction,
   changePasswordConfirmAction,
   submitPasswordAction,
-  clearSuccess
+  clearSuccess,
 } from './actions';
 
 import { color, typography } from '../../styles/constants';
@@ -48,19 +52,22 @@ class CreatePassword extends React.Component {
         password_confirm: null,
       },
       isSubmitTriggered: false,
-      isSuccessNotification: false
+      isSuccessNotification: false,
     };
   }
 
-  componentDidUpdate(prevProps){
-    if(!!this.props.successMessage && prevProps.successMessage === null){
+  componentDidUpdate(prevProps) {
+    if (!!this.props.successMessage && prevProps.successMessage === null) {
       this.setState({
-        isSuccessNotification:true
-      })
-    } else if(!!prevProps.successMessage && this.props.successMessage === null){
+        isSuccessNotification: true,
+      });
+    } else if (
+      !!prevProps.successMessage &&
+      this.props.successMessage === null
+    ) {
       this.setState({
-        isSuccessNotification:false
-      })
+        isSuccessNotification: false,
+      });
     }
   }
 
@@ -141,11 +148,11 @@ class CreatePassword extends React.Component {
   };
   // #endregion
 
-  // #region handle route changes 
-  handleRouteChanges = (route) => {
+  // #region handle route changes
+  handleRouteChanges = route => {
     const { history } = this.props;
     history.replace(route);
-  }
+  };
   // #endregion
 
   render() {
@@ -155,20 +162,20 @@ class CreatePassword extends React.Component {
       changePasswordConfirm,
       password,
       passwordConfirm,
-      successMessage
+      successMessage,
     } = this.props;
     return (
       <Wrapper container wrap="nowrap" direction="column">
-        <PageAppBar
-          appTitle="Login"
-          backHandler={() => this.handleBack()}
+        <PageAppBar 
+          appTitle="Login" 
+          backHandler={() => this.handleBack()} 
         />
-        <Box
-          display="flex"
-          width="100%"
-          alignItems="center"
-          justifyContent="center"
-        >
+        <AppBox>
+          <AppLoader 
+            open={this.props.isLoading} 
+            type="circular" 
+            message="Mohon Tunggu" />
+          
           <NotificationSnackbar
             verticalPos="top"
             notificationType="success"
@@ -214,7 +221,7 @@ class CreatePassword extends React.Component {
               <TextField
                 id="konfirmasi_password"
                 name="konfirmasi_password"
-                label="konfirm password"
+                label="konfirmasi password"
                 type="text"
                 fullWidth
                 variant="outlined"
@@ -240,7 +247,7 @@ class CreatePassword extends React.Component {
               />
             </form>
           </PaperCustom>
-        </Box>
+        </AppBox>
       </Wrapper>
     );
   }
@@ -260,7 +267,8 @@ const mapStateToProps = createStructuredSelector({
   password: makeSelectPassword(),
   passwordConfirm: makeSelectPasswordConfirm(),
   errorMessage: makeSelectError(),
-  successMessage: makeSelectSuccess()
+  successMessage: makeSelectSuccess(),
+  isLoading:makeSelectIsLoading()
 });
 
 function mapDispatchToProps(dispatch) {
@@ -268,7 +276,7 @@ function mapDispatchToProps(dispatch) {
     changePassword: data => dispatch(changePasswordAction(data)),
     changePasswordConfirm: data => dispatch(changePasswordConfirmAction(data)),
     submitPassword: () => dispatch(submitPasswordAction()),
-    clearSuccess: () => dispatch(clearSuccess())
+    clearSuccess: () => dispatch(clearSuccess()),
   };
 }
 

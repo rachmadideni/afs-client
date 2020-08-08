@@ -1,20 +1,8 @@
 import { createSelector } from 'reselect';
 import { initialState } from './reducer';
 
-/**
- * Direct selector to the createPassword state domain
- */
-
 const selectCreatePasswordDomain = state =>
   state.createPassword || initialState;
-
-/**
- * Other specific selectors
- */
-
-/**
- * Default selector used by CreatePassword
- */
 
 const makeSelectCreatePassword = () =>
   createSelector(
@@ -46,11 +34,14 @@ const makeSelectSuccess = () =>
     substate => substate.success.message,
   );
 
+const makeSelectIsLoading = () => createSelector(selectCreatePasswordDomain, substate => substate.isLoading);
+
 export default makeSelectCreatePassword;
 export { 
   selectCreatePasswordDomain,
   makeSelectPassword,
   makeSelectPasswordConfirm,
   makeSelectError,
-  makeSelectSuccess
+  makeSelectSuccess,
+  makeSelectIsLoading
 };
