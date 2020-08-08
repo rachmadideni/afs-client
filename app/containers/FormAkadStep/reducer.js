@@ -5,10 +5,15 @@
  */
 import produce from 'immer';
 import {
+  GET_OPSI_DOKUMEN_ACTION,
   GET_OPSI_DOKUMEN_SUCCESS_ACTION,
+  GET_OPSI_PROPINSI_ACTION,
   GET_OPSI_PROPINSI_SUCCESS_ACTION,
+  GET_OPSI_KOTA_ACTION,
   GET_OPSI_KOTA_SUCCESS_ACTION,
+  GET_OPSI_KECAMATAN_ACTION,
   GET_OPSI_KECAMATAN_SUCCESS_ACTION,
+  GET_OPSI_KELURAHAN_ACTION,
   GET_OPSI_KELURAHAN_SUCCESS_ACTION,
   CHANGE_STSKWN_ACTION,
   CHANGE_NMPSGN_ACTION,
@@ -20,10 +25,13 @@ import {
   CHANGE_KOTA_ACTION,
   CHANGE_KECAMATAN_ACTION,
   CHANGE_KELURAHAN_ACTION,
-  RESET_FORM_SUCCESS_ACTION
+  RESET_FORM_SUCCESS_ACTION,
+  SUBMIT_FORM_AKAD_ACTION,
+  SUBMIT_FORM_AKAD_SUCCESS_ACTION
 } from './constants';
 
 export const initialState = {
+  isLoading:false,
   data:{
       stskwn:1,    
       nmpsgn:"",
@@ -53,25 +61,49 @@ const formAkadStepReducer = (state = initialState, action) =>
         draft.data = action.payload;
         return draft;
       }
+      case GET_OPSI_DOKUMEN_ACTION:
+        draft.isLoading = true;
+        return draft;
+
       case GET_OPSI_DOKUMEN_SUCCESS_ACTION:{
+        draft.isLoading = false;
         draft.opsi.dokumen = action.payload;
         return draft;
       }
 
+      case GET_OPSI_PROPINSI_ACTION:
+        draft.isLoading = true;
+        return draft;
+
       case GET_OPSI_PROPINSI_SUCCESS_ACTION:{
+        draft.isLoading = false;
         draft.opsi.propinsi = action.payload;
         return draft;
       }
       
+      case GET_OPSI_KOTA_ACTION:
+        draft.isLoading = true;
+        return draft;
+      
       case GET_OPSI_KOTA_SUCCESS_ACTION:{
+        draft.isLoading = false;
         draft.opsi.kota = action.payload;
         return draft;
       }
       
+      case GET_OPSI_KECAMATAN_ACTION:
+        draft.isLoading = true;  
+        return draft;
+      
       case GET_OPSI_KECAMATAN_SUCCESS_ACTION:{
+        draft.isLoading = false;
         draft.opsi.kecamatan = action.payload;
         return draft;
       }
+
+      case GET_OPSI_KELURAHAN_ACTION:
+        draft.isLoading = true;
+        return draft;
       
       case GET_OPSI_KELURAHAN_SUCCESS_ACTION:{
         draft.opsi.kelurahan = action.payload;
@@ -139,6 +171,14 @@ const formAkadStepReducer = (state = initialState, action) =>
         }
         break;
       }
+
+      case SUBMIT_FORM_AKAD_ACTION:
+        draft.isLoading = true;
+        return draft;
+      
+      case SUBMIT_FORM_AKAD_SUCCESS_ACTION:
+        draft.isLoading = false;
+        return draft;
     }
     return draft;
   });

@@ -1,19 +1,7 @@
 import { createSelector } from 'reselect';
 import { initialState } from './reducer';
 
-/**
- * Direct selector to the formAkadStep state domain
- */
-
 const formAkadDomain = state => state.formAkadStep || initialState;
-
-/**
- * Other specific selectors
- */
-
-/**
- * Default selector used by FormAkadStep
- */
 
 const makeSelectFormAkadStep = () => createSelector(formAkadDomain, substate => substate);
 const formAkadData = () => createSelector(formAkadDomain, substate => substate.data);
@@ -35,6 +23,8 @@ const idkota = () => createSelector(formAkadDomain, substate => substate.data.id
 const idkecm = () => createSelector(formAkadDomain, substate => substate.data.idkecm);
 const idkelr = () => createSelector(formAkadDomain, substate => substate.data.idkelr);
 
+const makeSelectIsLoading = () => createSelector(formAkadDomain, substate => substate.isLoading);
+
 export default makeSelectFormAkadStep;
 export {
   formAkadData,
@@ -52,5 +42,6 @@ export {
   idprop,
   idkota,
   idkecm,
-  idkelr
+  idkelr,
+  makeSelectIsLoading
 };

@@ -25,23 +25,28 @@ import {
   tglhrp,
   jmlank,
   uploaded,
-  formAkadData
+  formAkadData,
+  makeSelectIsLoading
 } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 import messages from './messages';
 
 import Grid from '@material-ui/core/Grid';
-import FormControl from '@material-ui/core/FormControl';
-import TextField from '@material-ui/core/TextField';
+import TextField from 'components/TextField'
+import BtnCustom from 'components/BtnCustom';
+import AppLoader from 'components/AppLoader';
 import Typography from '@material-ui/core/Typography';
-import InputLabel from '@material-ui/core/InputLabel';
-import Select from '@material-ui/core/Select';
 import Button from '@material-ui/core/Button';
 import MenuItem from '@material-ui/core/MenuItem';
 import Card from '@material-ui/core/Card';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardActionArea from '@material-ui/core/CardActionArea';
+// import FormControl from '@material-ui/core/FormControl';
+// import TextField from '@material-ui/core/TextField';
+// import InputLabel from '@material-ui/core/InputLabel';
+// import Select from '@material-ui/core/Select';
+
 // import AutoComplete from '@material-ui/lab/Autocomplete';
 
 import { STS_KWN } from './constants';
@@ -83,9 +88,10 @@ const Wrapper = styled(props => {
   && {    
     background-color:transparent;
     padding-top:0px;
-    margin-top:12px;
-    padding-left:0px;
-    padding-right:0px;
+    margin-top:12px;    
+    padding-left:15px;
+    padding-right:15px;
+    height:850px;
   }
 `;
 
@@ -163,20 +169,21 @@ class FormAkadStep extends React.Component {
       isTriggered: true
     }));
 
-    if (
-      this.validateInput(nmpsgn, 'nmpsgn') &&
-      this.validateInput(noktpp, 'noktpp') &&
-      this.validateInput(tglhrp, 'tglhrp' &&
-        this.props.uploaded.length > 0)) {
-      // submit
+    if(this.props.stskwn === 2){
+      if (
+        this.validateInput(nmpsgn, 'nmpsgn') &&
+        this.validateInput(noktpp, 'noktpp') &&
+        this.validateInput(tglhrp, 'tglhrp' &&
+          this.props.uploaded.length > 0)) {
+        // submit
+        console.log('submitted');
+        this.props.submitFormAkad();
+      }
+    } else {
       console.log('submitted');
       this.props.submitFormAkad();
-    } else {
-      console.log('not submitted');
     }
-
     return false;
-
   }
 
   handlePropinsi = (value) => {
@@ -219,6 +226,10 @@ class FormAkadStep extends React.Component {
 
     return (
       <Wrapper>
+        <AppLoader 
+          open={this.props.isLoading} 
+          type="circular"
+          message="Mohon Tunggu" />
 
         <form autoComplete="off">
           <Typography
@@ -244,7 +255,7 @@ class FormAkadStep extends React.Component {
             {intl.formatMessage(messages.form_description)}
           </Typography>
 
-          <FormControl fullWidth margin="dense">
+          {/* <FormControl fullWidth margin="dense">
             <InputLabel
               color="secondary"
               shrink
@@ -288,7 +299,38 @@ class FormAkadStep extends React.Component {
                 ))
               }
             </Select>
-          </FormControl>
+          </FormControl> */}
+
+          <TextField
+            id="stskwn"
+            name="stskwn"
+            select
+            variant="outlined"
+            margin="dense"
+            color="secondary"
+            InputLabelProps={{ shrink: true }}
+            label={intl.formatMessage(messages.status_pernikahan)}
+            fullWidth
+            value={this.props.stskwn}
+            displayEmpty
+            onChange={evt => {
+              return changeStskwn(evt.target.value);
+            }}>
+              {
+                STS_KWN.map((item, i) => (
+                  <MenuItem
+                    key={`item-stskwn-${i}`}
+                    value={item.ID}
+                    style={{
+                      fontFamily: typography.fontFamily,
+                      fontSize: '13px',
+                      textTransform: 'lowercase'
+                    }}>
+                    {item.NMSTAT}
+                  </MenuItem>
+                ))
+              }
+          </TextField>
 
           <TextField
             id="NMPSGN"
@@ -308,12 +350,7 @@ class FormAkadStep extends React.Component {
               return changeNmpsgn(evt.target.value);
             }}
             error={!!error.nmpsgn}
-            helperText={error.nmpsgn}
-            style={{
-              fontFamily: typography.fontFamily,
-              fontSize: '13px',
-              textTransform: 'lowercase'
-            }} />
+            helperText={error.nmpsgn} />
 
           <TextField
             id="noktpp"
@@ -334,12 +371,7 @@ class FormAkadStep extends React.Component {
               return changeNoktpp(evt.target.value);
             }}
             error={!!error.noktpp}
-            helperText={error.noktpp}
-            style={{
-              fontFamily: typography.fontFamily,
-              fontSize: '13px',
-              textTransform: 'lowercase'
-            }} />
+            helperText={error.noktpp} />
 
           <TextField
             id="tglhrp"
@@ -361,22 +393,16 @@ class FormAkadStep extends React.Component {
               return changeTglhrp(evt.target.value);
             }}
             error={!!error.tglhrp}
-            helperText={error.tglhrp}
-            style={{
-              fontFamily: typography.fontFamily,
-              fontSize: '13px',
-              textTransform: 'lowercase'
-            }} />
+            helperText={error.tglhrp} />
 
           <TextField
-            id="tglhrp"
-            name="tglhrp"
+            id="jmlank"
+            name="jmlank"
             type="number"
             fullWidth
             color="secondary"
             InputLabelProps={{ shrink: true }}
-            label={intl.formatMessage(messages.jmlank)}
-            labelwidth={110}
+            label={intl.formatMessage(messages.jmlank)}            
             variant="outlined"
             margin="dense"
             value={this.props.jmlank}
@@ -388,14 +414,9 @@ class FormAkadStep extends React.Component {
               return changeJmlank(evt.target.value);
             }}
             error={!!error.jmlank}
-            helperText={error.jmlank}
-            style={{
-              fontFamily: typography.fontFamily,
-              fontSize: '13px',
-              textTransform: 'lowercase'
-            }} />
+            helperText={error.jmlank} />
 
-          <FormControl
+          {/* <FormControl
             margin="dense"
             fullWidth>
             <InputLabel
@@ -440,9 +461,38 @@ class FormAkadStep extends React.Component {
                 ))
               }
             </Select>
-          </FormControl>
+          </FormControl> */}
 
-          <FormControl
+          <TextField
+            id="propinsi"
+            name="propinsi"
+            select
+            InputLabelProps={{ shrink: true }}
+            label={intl.formatMessage(messages.opsiPropinsi)}
+            value={formAkadData.idprop}
+            onChange={evt => this.handlePropinsi(evt.target.value)}
+            displayEmpty
+            variant="outlined"
+            margin="dense"
+            color="secondary"
+            fullWidth>
+              {
+                opsi_propinsi.map((item, i) => (
+                  <MenuItem
+                    key={`item-stskwn-${i}`}
+                    value={item.idprop}
+                    style={{
+                      fontFamily: typography.fontFamily,
+                      fontSize: '13px',
+                      textTransform: 'lowercase'
+                    }}>
+                    {item.nmprop}
+                  </MenuItem>
+                ))
+              }
+          </TextField>
+
+          {/* <FormControl
             margin="dense"
             fullWidth>
             <InputLabel
@@ -487,9 +537,38 @@ class FormAkadStep extends React.Component {
                 ))
               }
             </Select>
-          </FormControl>
+          </FormControl> */}
 
-          <FormControl
+          <TextField
+            id="kota"
+            name="kota"
+            InputLabelProps={{ shrink: true }}
+            label={intl.formatMessage(messages.opsiKota)}
+            select            
+            value={formAkadData.idkota}
+            onChange={evt => this.handleKota(evt.target.value)}
+            displayEmpty
+            variant="outlined"
+            margin="dense"
+            color="secondary"
+            fullWidth>
+              {
+                opsi_kota.map((item, i) => (
+                  <MenuItem
+                    key={`item-stskwn-${i}`}
+                    value={item.idkota}
+                    style={{
+                      fontFamily: typography.fontFamily,
+                      fontSize: '13px',
+                      textTransform: 'lowercase'
+                    }}>
+                    {item.nmkota}
+                  </MenuItem>
+                ))
+              }
+          </TextField>
+
+          {/* <FormControl
             margin="dense"
             fullWidth>
             <InputLabel
@@ -534,9 +613,38 @@ class FormAkadStep extends React.Component {
                 ))
               }
             </Select>
-          </FormControl>
+          </FormControl> */}
 
-          <FormControl
+          <TextField
+            id="kecamatan"
+            name="kecamatan"
+            select
+            InputLabelProps={{ shrink: true }}
+            label={intl.formatMessage(messages.opsiKecamatan)}            
+            value={formAkadData.idkecm}
+            onChange={evt => this.handleKecamatan(evt.target.value)}
+            displayEmpty
+            variant="outlined"
+            margin="dense"
+            color="secondary"
+            fullWidth>
+              {
+                opsi_kecamatan.map((item, i) => (
+                  <MenuItem
+                    key={`item-stskwn-${i}`}
+                    value={item.idkecm}
+                    style={{
+                      fontFamily: typography.fontFamily,
+                      fontSize: '13px',
+                      textTransform: 'lowercase'
+                    }}>
+                    {item.nmkecm}
+                  </MenuItem>
+                ))
+              }
+          </TextField>
+
+          {/* <FormControl
             margin="dense"
             fullWidth>
             <InputLabel
@@ -581,7 +689,36 @@ class FormAkadStep extends React.Component {
                 ))
               }
             </Select>
-          </FormControl>
+          </FormControl> */}
+
+          <TextField
+            id="kelurahan"
+            name="kelurahan"
+            select
+            InputLabelProps={{ shrink: true }}
+            label={intl.formatMessage(messages.opsiKelurahan)}
+            value={formAkadData.idkelr}
+            onChange={evt => this.handleKelurahan(evt.target.value)}
+            displayEmpty
+            variant="outlined"
+            margin="dense"
+            color="secondary"
+            fullWidth>
+              {
+                opsi_kelurahan.map((item, i) => (
+                  <MenuItem
+                    key={`item-stskwn-${i}`}
+                    value={item.idkelr}
+                    style={{
+                      fontFamily: typography.fontFamily,
+                      fontSize: '13px',
+                      textTransform: 'lowercase'
+                    }}>
+                    {item.nmkelr}
+                  </MenuItem>
+                ))
+              }
+          </TextField>
 
           {this.props.opsi_dokumen.map((item, i) => (
             <Button
@@ -607,10 +744,10 @@ class FormAkadStep extends React.Component {
           ))}
 
           {this.props.uploaded.map((item, i) => (
-            <Grid style={{ marginTop: 5, width: '70px', height: '60px' }}>
+            <Grid style={{ marginTop: 5, width: '100%', height: '150px' }}>
               <Card raised={false}>
                 <CardActionArea>
-                  <CardMedia key={`img-${i}`} image={`${item.objectURL}`} style={{ height: '60px' }} />
+                  <CardMedia key={`img-${i}`} image={`${item.objectURL}`} style={{ height: '150px' }} />
                 </CardActionArea>
               </Card>
             </Grid>
@@ -623,7 +760,8 @@ class FormAkadStep extends React.Component {
             disableElevation            
             onClick={this.handleSubmit}
             style={{
-              marginTop: 5
+              marginTop: 5,
+              marginBottom:50
             }}>
             {intl.formatMessage(messages.btnSubmit)}
           </Button>
@@ -652,7 +790,8 @@ const mapStateToProps = createStructuredSelector({
   tglhrp: tglhrp(),
   jmlank: jmlank(),
   uploaded: uploaded(),
-  formAkadData: formAkadData()
+  formAkadData: formAkadData(),
+  isLoading: makeSelectIsLoading()
 });
 
 function mapDispatchToProps(dispatch) {
