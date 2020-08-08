@@ -45,3 +45,10 @@ export const RESET_FORM_SUCCESS_ACTION = 'app/FormSubmissionStep/RESET_FORM_SUCC
 // action disable/enable step simulasi
 export const SET_SIMULASI_TOUR_ACTION = 'app/FormSubmissionStep/SET_SIMULASI_TOUR_ACTION';
 
+export const BUAT_DIREKTORI_UPLOAD = 'app/FormSubmissionStep/BUAT_DIREKTORI_UPLOAD';
+export const BUAT_DIREKTORI_UPLOAD_SUKSES = 'app/FormSubmissionStep/BUAT_DIREKTORI_UPLOAD_SUKSES';
+export const BUAT_DIREKTORI_UPLOAD_ERROR = 'app/FormSubmissionStep/BUAT_DIREKTORI_UPLOAD_ERROR';
+
+export const RESET_FORM_SUBMISSION = 'app/FormSubmissionStep/RESET_FORM_SUBMISSION';
+export const RESET_FORM_SUBMISSION_SUCCESS = 'app/FormSubmissionStep/RESET_FORM_SUBMISSION_SUCCESS';
+export const RESET_FORM_SUBMISSION_ERROR = 'app/FormSubmissionStep/RESET_FORM_SUBMISSION_ERROR';

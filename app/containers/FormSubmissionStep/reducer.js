@@ -14,6 +14,9 @@ import {
   SUBMIT_PENGAJUAN_SUCCESS_ACTION,
   RESET_FORM_SUCCESS_ACTION,
   SET_SIMULASI_TOUR_ACTION,
+  RESET_FORM_SUBMISSION,
+  RESET_FORM_SUBMISSION_SUCCESS,
+  RESET_FORM_SUBMISSION_ERROR
 } from './constants';
 
 // CONSTANT ANGSURAN
@@ -254,8 +257,12 @@ const formSubmissionStepReducer = (state = initialState, action) =>
         const pengajuan = mapPengajuan(action.payload.pengajuan);
         const nobase = mapCredential(action.payload.nobase);
         const gaji = mapGaji(action.payload.finance);
-        draft.send.nasabah = { ...nobase, ...gaji, ...cif, ...work };
-        draft.send.finance = { ...nobase, ...finance, ...pengajuan };
+        const emanas = action.payload.emanas;
+        const nomhp1 = action.payload.nomhp1;
+        const loginId = action.payload.loginId;
+        // console.log(emanas,nomhp1);
+        draft.send.nasabah = { ...nobase, ...gaji, ...cif, ...work, EMANAS:emanas, NOMHP1:nomhp1 };
+        draft.send.finance = { ...nobase, ...finance, ...pengajuan, IDINPT:loginId };
         draft.send.files = action.payload.files;
         return draft;
       }
@@ -450,6 +457,15 @@ const formSubmissionStepReducer = (state = initialState, action) =>
         draft.opsi.sub_pengajuan = action.payload;
         return draft;
       }
+
+      case RESET_FORM_SUBMISSION:
+      draft = initialState;
+      return draft;
+
+      case RESET_FORM_SUBMISSION_SUCCESS:
+        return draft;
+      case RESET_FORM_SUBMISSION_ERROR:
+        return draft;
     }
     return draft;
   });

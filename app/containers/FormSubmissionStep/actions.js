@@ -16,8 +16,49 @@ import {
   SUBMIT_PENGAJUAN_SUCCESS_ACTION,
   RESET_FORM_ACTION,
   RESET_FORM_SUCCESS_ACTION,
-  SET_SIMULASI_TOUR_ACTION
+  SET_SIMULASI_TOUR_ACTION,
+  BUAT_DIREKTORI_UPLOAD,
+  BUAT_DIREKTORI_UPLOAD_SUKSES,
+  BUAT_DIREKTORI_UPLOAD_ERROR,
+  RESET_FORM_SUBMISSION,
+  RESET_FORM_SUBMISSION_SUCCESS,
+  RESET_FORM_SUBMISSION_ERROR
 } from './constants';
+
+export const resetFormSubmission = () => ({
+  type: RESET_FORM_SUBMISSION
+})
+
+export const resetFormSubmissionSuccess = (success) => ({
+  type: RESET_FORM_SUBMISSION_SUCCESS,
+  payload: success
+})
+
+export const resetFormSubmissionError = (error) => ({
+  type: RESET_FORM_SUBMISSION_ERROR,
+  payload: error
+})
+
+export const buatDirektoriUpload = (nomrek) => ({
+  type: BUAT_DIREKTORI_UPLOAD,
+  payload: {
+    nomrek
+  }
+});
+
+export const buatDirektoriUploadSukses = (message) => ({
+  type: BUAT_DIREKTORI_UPLOAD_SUKSES,
+  payload: {
+    message
+  }
+})
+
+export const buatDirektoriUploadError = (error) => ({
+  type: BUAT_DIREKTORI_UPLOAD_ERROR,
+  payload: {
+    message:error
+  }
+});
 
 export function setSimulasiTourAction(open, count){
   return {
@@ -98,7 +139,7 @@ export function mapPengajuanAction(){
 }
 
 export function mapPengajuanSuccessAction(payload){
-  const { nobase, nasabah, work, finance, files, pengajuan } = payload;
+  const { nobase, nasabah, work, finance, files, pengajuan, emanas, nomhp1, loginId } = payload;
   return {
     type:MAP_PENGAJUAN_SUCCESS_ACTION,
     payload:{
@@ -107,7 +148,10 @@ export function mapPengajuanSuccessAction(payload){
       work,
       finance,
       files,
-      pengajuan
+      pengajuan,
+      emanas,
+      nomhp1,
+      loginId
     }
   }
 }

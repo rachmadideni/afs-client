@@ -49,6 +49,7 @@ import {
   makeSelectNasabah,
   makeSelectWorkData,
   makeSelectDocuments,
+  makeSelectOpsiDokumenTahap1,
   makeSelectPengajuan,
   makeSelectTourSimulasi,
 } from './selectors';
@@ -63,12 +64,16 @@ const Wrapper = styled(props => (
 ))`
   && {
     background-color: transparent;
-    justify-content: flex-end;
-    margin-top: 12px;
+    justify-content: center;
+    // align-items:space-between;
+    margin-top: 0px;
+    padding-left:15px;
+    padding-right:15px;
+    padding-top:15px;
   }
 `;
 
-const STEPS = [
+export const STEPS = [
   {
     step: 0,
     url: '/application-form/step/customer/installment',
@@ -102,11 +107,13 @@ const STEPS = [
 ];
 
 class FormSubmissionStep extends React.Component {
+  
   componentDidUpdate(prevProps) {
     const { history, activeStep } = this.props;
 
     // routing based on props
     if (prevProps.activeStep !== this.props.activeStep) {
+      console.log(prevProps.activeStep, this.props.activeStep);
       if (activeStep === 0) {
         return history.push(`/application-form/step/customer/installment`);
       }
@@ -138,7 +145,7 @@ class FormSubmissionStep extends React.Component {
     const { completedStep, activeStep } = this.props;
     if (activeStep > -1 && activeStep <= completedStep.length) {
       this.props.setActiveStep(1); // 1 increment -1 decrement
-      this.props.setCompletedStep(true, 25);
+      // this.props.setCompletedStep(true, 25);
     }
   };
 
@@ -146,16 +153,9 @@ class FormSubmissionStep extends React.Component {
     const { activeStep } = this.props;
     if (activeStep > -1) {
       this.props.setActiveStep(-1); // 1 increment -1 decrement
-      this.props.setCompletedStep(false, 0);
+      // this.props.setCompletedStep(false, 0);
     }
-  };
-
-  // handleTour = () => {
-  //   this.setState(state => ({
-  //     ...state,
-  //     isTourOpen: !isTourOpen,
-  //   }));
-  // };
+  };  
 
   render() {
     const {
@@ -188,6 +188,7 @@ class FormSubmissionStep extends React.Component {
               nasabah={this.props.nasabah}
               work={this.props.work}
               documents={this.props.documents}
+              opsi_dokumen={this.props.opsi_dokumen}
               pengajuan={this.props.pengajuan}
               tourSimulasi={this.props.tourSimulasi}
               setSimulasiTour={this.props.setSimulasiTour}
@@ -200,7 +201,7 @@ class FormSubmissionStep extends React.Component {
                 key={`route-${route.step}`}
                 path={route.url}
                 render={routeProps => (
-                  <route.item history={history} {...routeProps} />
+                  <route.item history={history} {...routeProps} activeStep={activeStep} />
                 )}
               />
             ))}
@@ -245,6 +246,7 @@ const mapStateToProps = createStructuredSelector({
   nasabah: makeSelectNasabah(),
   work: makeSelectWorkData(),
   documents: makeSelectDocuments(),
+  opsi_dokumen: makeSelectOpsiDokumenTahap1(),
   pengajuan: makeSelectPengajuan(),
   tourSimulasi: makeSelectTourSimulasi(),
 });

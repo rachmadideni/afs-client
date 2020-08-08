@@ -1,26 +1,18 @@
-import {
-  put,
-  select,
-  call,
-  all,
-  takeLatest,
-  takeEvery,
-} from 'redux-saga/effects';
+import { put, select, call, all, takeLatest, takeEvery } from 'redux-saga/effects';
 import request from 'utils/request';
 import { api } from 'environments';
 import { replace } from 'connected-react-router';
 import validate from 'validate.js';
-
+import Compressor from "compressorjs";
+// #region import initial state
 import { initialState } from './reducer';
-
-// helpers
+// #endregion
+// #region helpers
 import { calcAcceptableInstallment } from '../PerhitunganAngsuran/helpers';
-
-// selectors
-import { makeSelectAuthToken } from '../App/selectors';
-
+// #endregion
+// #region import selectors
+import { makeSelectAuthToken, makeSelectEmail, makeSelectNotelp, makeSelectLoginId } from '../App/selectors';
 import { makeSelectCredential } from '../Login/selectors';
-
 import {
   makeSelectGaji,
   makeSelectNasabah,
@@ -31,7 +23,8 @@ import {
   makeSelectCifData,
   makeSelectFinanceData,
 } from './selectors';
-
+// #endregion
+// #region import Action Type
 import {
   CHANGE_GAJI_ACTION,
   GET_PARAM_ACTION,
@@ -42,7 +35,9 @@ import {
   GET_OPSI_JENKEL_ACTION,
 } from '../FormNasabah/constants';
 
-import { GET_OPSI_SBU_ACTION } from '../FormPekerjaan/constants';
+import { 
+  GET_OPSI_SBU_ACTION
+} from '../FormPekerjaan/constants';
 
 import {
   GET_OPSI_DOKUMEN_TAHAP_1_ACTION,
@@ -50,14 +45,17 @@ import {
   // UPLOAD_ACTION,
 } from '../FormDocument/constants';
 
-import { GET_OPSI_JENIS_PENGAJUAN_ACTION } from '../FormPengajuan/constants';
+import { 
+  GET_OPSI_JENIS_PENGAJUAN_ACTION
+} from '../FormPengajuan/constants';
 
 import {
   MAP_PENGAJUAN_ACTION,
+  BUAT_DIREKTORI_UPLOAD
   // INSERT_CIF_ACTION
 } from './constants';
-
-// actions
+// #endregion
+// #region import Actions
 import {
   setLimitAngsuranAction,
   getParamSuccessAction,
@@ -69,11 +67,10 @@ import {
 } from '../FormNasabah/actions';
 
 import { getOpsiSbuSuccessAction } from '../FormPekerjaan/actions';
-
 import {
-  // uploadDokumenAction,
   getOpsiDokumenTahap1SuccessAction,
   uploadAction,
+  // uploadDokumenAction,
   // uploadSuccessAction,
 } from '../FormDocument/actions';
 
@@ -81,26 +78,16 @@ import { getOpsiJenisPengajuanSuccessAction } from '../FormPengajuan/actions';
 
 import {
   mapPengajuanSuccessAction,
-  // insertCifSuccessAction,
   submitPengajuanAction,
   submitPengajuanSuccessAction,
   resetFormSuccessAction,
+  buatDirektoriUploadSukses,
+  buatDirektoriUploadError
+  // insertCifSuccessAction,
 } from './actions';
+// #endregion
 
-// async function convertToBase64(file) {
-//   try {
-//     const result = await new Promise((resolve, reject) => {
-//       const reader = new FileReader();
-//       reader.onload = () => resolve(reader.result);
-//       reader.onerror = error => reject(error);
-//       reader.readAsDataURL(file);
-//     });
-//     return result;
-//   } catch (e) {
-//     return file;
-//   }
-// }
-
+// #region ambil dokumen dan simpan ke state 
 export function* uploadDocument(action) {
   const { key, file } = action.payload;
   // let base64File = yield convertToBase64(file);
@@ -109,8 +96,9 @@ export function* uploadDocument(action) {
   // yield put(uploadDokumenAction(key, localImageUrl));
   yield put(uploadAction(key, localImageUrl));
 }
-
-export function* setLimitAngsuran() {
+// #endregion
+// #region setting batas limit angsuran berdasarkan pendapatan bersih
+export function* setLimitAngsuran(){
   try {
     const gaji = yield select(makeSelectGaji());
     const limitAngsuran = calcAcceptableInstallment(gaji);
@@ -120,7 +108,8 @@ export function* setLimitAngsuran() {
     throw new Error(err);
   }
 }
-
+// #endregion
+// #region validasi input
 export function* validateInput(action) {
   try {
     let isError = false;
@@ -161,7 +150,9 @@ export function* validateInput(action) {
     throw new Error(error);
   }
 }
+// #endregion
 
+// #region ambil parameter pembiayaan
 export function* getParam(action) {
   try {
     const { idprod } = action.payload;
@@ -185,7 +176,8 @@ export function* getParam(action) {
     throw new Error(err);
   }
 }
-
+// #endregion
+// #region ambil opsi jenis kelamin
 export function* getOpsiJenkel() {
   try {
     // localhost/api/opsi/key/sbu
@@ -210,7 +202,8 @@ export function* getOpsiJenkel() {
     throw new Error(err);
   }
 }
-
+// #endregion
+// #region ambil opsi SBU
 export function* getOpsiSbu() {
   try {
     // localhost/api/opsi/key/sbu
@@ -234,7 +227,8 @@ export function* getOpsiSbu() {
     throw new Error(err);
   }
 }
-
+// #endregion
+// #region ambil opsi dokumen tahap pertama (berkas mayor)
 export function* getOpsiDokumenTahap1() {
   try {
     const endpoint = `${api.host}/api/opsi/key/dokumen_tahap_1`;
@@ -257,7 +251,8 @@ export function* getOpsiDokumenTahap1() {
     throw new Error(err);
   }
 }
-
+// #endregion
+// #region ambil opsi jenis pengajuan atau tujuan penggunaan
 export function* getOpsiJenisPengajuan() {
   try {
     const endpoint = `${api.host}/api/opsi/key/tujuan_penggunaan`;
@@ -278,31 +273,26 @@ export function* getOpsiJenisPengajuan() {
     throw new Error(err);
   }
 }
-
-// PREPARE angsuran, nasabah, pekerjaan, dokumen, jenis pengajuan
-// map nasabah => dt_p_cif => nobase, nmleng, jenkel, tptlhr, tgllhr, alamt1,
-// map angsuran => dt_p_finance => nomrek,nobase,hrgotr,tenang,margin,totang
-// map pekerjaan => dt_p_cif => idsbu
-// map dokumen => dt_berkas => idberk, nmberk,
-// map jenis pengajuan => dt_p_finance => tujuan
-
-// tahap 2
-// map pasangan => dt_p_cif => stskwn,jmlank,nmpsgn,noktpp,tglhrp
-
+// #endregion
+// #region upload dokumen
 export function* uploadFiles(files) {
   const endpoint = `${api.host}/api/upload_dokumen`;
+  
+  let compressedFile = files.file;
+  compressedFile = yield new Promise((resolve,reject)=>{
+    new Compressor(files.file, {
+      success: result => {
+        resolve(result);
+      },
+      error:reject,
+      quality:0.6
+    });
+  }).then(result=>result)
+  .catch(()=>files.file);
+
   const formData = new FormData();
-
-  // for (let i = 0; i < files.length; i+=1 ){
-  //   const file = files[i];
-  //   // console.log(file.file);
-  //   // console.log(i);
-  //   formData.append(`file`, file.file, file);//file.name
-  //   formData.append('DOK_ID',i);
-  //   formData.append('nomrek','200100000023');
-  // }
-
-  formData.append('file', files.file, files.file.name); // file.name
+  // formData.append('file', files.file, files.file.name); // file.name
+  formData.append('file', compressedFile, files.file.name); // file.name
   formData.append('DOK_ID', files.idberk);
   formData.append('nomrek', files.nomrek);
 
@@ -318,7 +308,8 @@ export function* uploadFiles(files) {
     throw new Error(err);
   }
 }
-
+// #endregion
+// #region ambil nomrek berdasarkan NOBASE (NIK)
 export function* getNomrek(nobase) {
   try {
     const endpoint = `${api.host}/api/getNomrek/${nobase}`;
@@ -339,7 +330,8 @@ export function* getNomrek(nobase) {
     throw new Error(err);
   }
 }
-
+// #endregion
+// #region mapping semua state dan satukan sebagai pengajuan
 export function* mapPengajuan() {
   try {
     const nobase = yield select(makeSelectCredential());
@@ -348,6 +340,11 @@ export function* mapPengajuan() {
     const finance = yield select(makeSelectFinance()); // perhitungan angsuran
     const pengajuan = yield select(makeSelectPengajuan()); // tujuan pemanfaatan
     const files = yield select(makeSelectUploadedFiles()); // dokumen
+
+    // tambahan email dan nomor handphone nasabah
+    const emanas = yield select(makeSelectEmail()); 
+    const nomhp1 = yield select(makeSelectNotelp());
+    const loginId = yield select(makeSelectLoginId());
 
     yield put(submitPengajuanAction()); // formSubmitted = true
     yield put(
@@ -358,40 +355,73 @@ export function* mapPengajuan() {
         finance,
         pengajuan,
         files,
+        emanas,
+        nomhp1,
+        loginId
       }),
     );
 
-    const cifData = yield select(makeSelectCifData());
     const defaultColumns = {
       JENCIF: 1,
       KDPRDK: work.jenisProduk,
+      // EMANAS: emanas,
+      // NOMHP1: nomhp1
     };
+    
+    // ambil state setelah mapping diformSubmissionStep.send  
+    const cifData = yield select(makeSelectCifData());
+    const financeData = yield select(makeSelectFinanceData());    
+    
     const cifResponse = yield call(sendCif, { ...cifData, ...defaultColumns });
-
-    const financeData = yield select(makeSelectFinanceData());
     const financeResponse = yield call(sendFinance, {
       ...financeData,
       ...defaultColumns,
     });
 
     if (cifResponse.status && financeResponse.status) {
-      // const submittedDataCount =
-      //   cifResponse.status && financeResponse.status ? 2 : 1;
       const nomrek = yield call(getNomrek, nobase.nik);
-
-      // upload multiple file
-      yield all(files.map(item => call(uploadFiles, { ...item, nomrek })));
-
-      yield put(submitPengajuanSuccessAction()); // formSubmitted = false
-      yield put(resetFormSuccessAction(initialState));
-      yield put(replace('/summary'));
+    //   // upload file ke server
+      const buatDirektoriUploadResponse = yield call(buatDirektoriUpload, nomrek);
+      if(buatDirektoriUploadResponse.status){
+        yield put(buatDirektoriUploadSukses(buatDirektoriUploadResponse.message));
+        yield all(files.map(item => call(uploadFiles, { ...item, nomrek })));
+        yield put(submitPengajuanSuccessAction()); // formSubmitted = false
+        yield put(resetFormSuccessAction(initialState));
+        yield put(replace('/summary'));
+      } else {
+        yield put(buatDirektoriUploadError(buatDirektoriUploadResponse.message));
+      }
     }
   } catch (err) {
     // console.log(err);
     throw new Error(err);
   }
 }
+// #endregion
+// #region buat direktori upload
+export function* buatDirektoriUpload(nomrek){
+  
+    const token = yield select(makeSelectAuthToken());
+    const endpoint = `${api.host}/api/buat_direktori`;
+    const requestOpt = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: token,
+      },
+      body: JSON.stringify(nomrek),
+    };
+    
+    try {
+      const response = yield call(request, endpoint, requestOpt);      
+      return response;
+    } catch(err){
+      throw new Error(err);
+    }
+}
+// #endregion
 
+// #region insert data cif
 export function* sendCif(cif) {
   const token = yield select(makeSelectAuthToken());
   const endpoint = `${api.host}/api/insert_nasabah`;
@@ -415,7 +445,8 @@ export function* sendCif(cif) {
     throw new Error(err);
   }
 }
-
+// #endregion
+// #region insert data finance
 export function* sendFinance(finance) {
   const token = yield select(makeSelectAuthToken());
   const endpoint = `${api.host}/api/pembiayaan`;
@@ -439,6 +470,7 @@ export function* sendFinance(finance) {
     throw new Error(err);
   }
 }
+// #endregion
 
 export default function* formSubmissionStepSaga() {
   yield all([
@@ -450,5 +482,6 @@ export default function* formSubmissionStepSaga() {
     takeLatest(GET_OPSI_DOKUMEN_TAHAP_1_ACTION, getOpsiDokumenTahap1),
     takeLatest(GET_OPSI_JENIS_PENGAJUAN_ACTION, getOpsiJenisPengajuan),
     takeEvery(MAP_PENGAJUAN_ACTION, mapPengajuan),
+    takeEvery(BUAT_DIREKTORI_UPLOAD, buatDirektoriUpload)
   ]);
 }

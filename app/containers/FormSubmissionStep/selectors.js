@@ -1,20 +1,10 @@
 import { createSelector } from 'reselect';
 import { initialState } from './reducer';
 
-/**
- * Direct selector to the formSubmissionStep state domain
- */
-
 const selectFormSubmissionStepDomain = state => state.formSubmissionStep || initialState;
-
-const makeSelectFormSubmissionStep = () =>
-  createSelector(
-    selectFormSubmissionStepDomain,
-    substate => substate,
-  );
+const makeSelectFormSubmissionStep = () => createSelector(selectFormSubmissionStepDomain, substate => substate);
 
 const makeSelectCompletedStep = () => createSelector(selectFormSubmissionStepDomain, substate => substate.completedStep);
-
 const makeSelectActiveStep = () => createSelector(selectFormSubmissionStepDomain, substate => substate.activeStep);
 const makeSelectStepProgress = () => createSelector(selectFormSubmissionStepDomain, substate=>substate.stepProgress);
 
@@ -25,7 +15,6 @@ const makeSelectTenor = () => createSelector(selectFormSubmissionStepDomain, sub
 const makeSelectMargin = () => createSelector(selectFormSubmissionStepDomain, substate => substate.data.angsuran.margin);
 const makeSelectAngsuran = () => createSelector(selectFormSubmissionStepDomain, substate => substate.data.angsuran.angsuran);
 const makeSelectLimitAngsuran = () => createSelector(selectFormSubmissionStepDomain, substate => substate.data.angsuran.limit_angsuran);
-
 
 const makeSelectNasabah = () => createSelector(selectFormSubmissionStepDomain, substate => substate.data.nasabah);
 const makeSelectFullname = () => createSelector(selectFormSubmissionStepDomain, substate => substate.data.nasabah.fullname);
@@ -44,50 +33,25 @@ const makeSelectErrorMotherMaidenName = () => createSelector(selectFormSubmissio
 
 const makeSelectTriggered = () => createSelector(selectFormSubmissionStepDomain, substate => substate.data.nasabah.isSubmitTriggered);
 
-const makeSelectWorkData = () => createSelector(selectFormSubmissionStepDomain, 
-  substate => substate.data.work);
+const makeSelectWorkData = () => createSelector(selectFormSubmissionStepDomain, substate => substate.data.work);
+const makeSelectPengajuan = () => createSelector(selectFormSubmissionStepDomain, substate => substate.data.pengajuan);
+const makeSelectDocuments = () => createSelector(selectFormSubmissionStepDomain, substate => substate.data.documents);
+const makeSelectUploadedFiles = () => createSelector(selectFormSubmissionStepDomain, substate => substate.data.documents.uploaded);
 
-const makeSelectDocuments = () => createSelector(selectFormSubmissionStepDomain, 
-  substate => substate.data.documents);
+// ini state setelah penggabugan atau maping dgn nasabah dan pembiayaan
+const makeSelectCifData = () => createSelector(selectFormSubmissionStepDomain, substate => substate.send.nasabah); 
+const makeSelectFinanceData = () => createSelector(selectFormSubmissionStepDomain, substate => substate.send.finance); 
 
-const makeSelectPengajuan = () => createSelector(selectFormSubmissionStepDomain,
-  substate => substate.data.pengajuan);
+const makeSelectParameter = () => createSelector(selectFormSubmissionStepDomain, substate => substate.opsi.param);
+const makeSelectJenkel = () => createSelector(selectFormSubmissionStepDomain, substate => substate.opsi.jenis_kelamin);
+const makeSelectSbu = () => createSelector(selectFormSubmissionStepDomain, substate => substate.opsi.sbu);
+const makeSelectOpsiDokumenTahap1 = () => createSelector(selectFormSubmissionStepDomain, substate => substate.opsi.dokumen);
+const makeSelectOpsiJenisPengajuan = () => createSelector(selectFormSubmissionStepDomain, substate => substate.opsi.sub_pengajuan);
 
-const makeSelectParameter = () => createSelector(selectFormSubmissionStepDomain, 
-  substate => substate.opsi.param
-);
+const makeSelectTourSimulasi = () => createSelector(selectFormSubmissionStepDomain, substate => substate.data.tour_simulasi); 
+const makeSelectFormSubmitted = () => createSelector(selectFormSubmissionStepDomain, substate => substate.formSubmitted);
 
-const makeSelectJenkel = () => createSelector(selectFormSubmissionStepDomain, 
-  substate => substate.opsi.jenis_kelamin
-);
-
-const makeSelectSbu = () => createSelector(selectFormSubmissionStepDomain, 
-  substate => substate.opsi.sbu
-);
-
-const makeSelectOpsiDokumenTahap1 = () => createSelector(selectFormSubmissionStepDomain,
-  substate => substate.opsi.dokumen);
-
-const makeSelectOpsiJenisPengajuan = () => createSelector(selectFormSubmissionStepDomain, 
-  substate => substate.opsi.sub_pengajuan);
-
-const makeSelectUploadedFiles = () => createSelector(selectFormSubmissionStepDomain,
-  substate => substate.data.documents.uploaded);
-
-
-const makeSelectCifData = () => createSelector(selectFormSubmissionStepDomain,
-  substate => substate.send.nasabah); 
-
-const makeSelectFinanceData = () => createSelector(selectFormSubmissionStepDomain,
-  substate => substate.send.finance); 
-
-const makeSelectTourSimulasi = () => createSelector(selectFormSubmissionStepDomain,
-  substate => substate.data.tour_simulasi); 
-
-const makeSelectFormSubmitted = () => createSelector(selectFormSubmissionStepDomain, 
-  substate => substate.formSubmitted);
-
-  export { 
+export { 
   makeSelectCompletedStep,
   makeSelectActiveStep,
   makeSelectStepProgress,
