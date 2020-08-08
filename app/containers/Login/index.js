@@ -1,9 +1,3 @@
-/**
- *
- * Login
- *
- */
-
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -14,15 +8,11 @@ import { compose } from 'redux';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 
-import Typography from '@material-ui/core/Typography';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import IconButton from '@material-ui/core/IconButton';
-import Visibility from '@material-ui/icons/Visibility';
-import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
 import isEmpty from 'validator/lib/isEmpty';
 import { color, typography } from 'styles/constants';
 
+import Typography from '@material-ui/core/Typography';
 import AppBar from 'components/AppBar';
 import AppTitle from 'components/AppTitle';
 import AppBox from 'components/AppBox';
@@ -258,9 +248,9 @@ class Login extends React.Component {
                 }}
                 error={!!this.state.error.nik}
                 helperText={this.state.error.nik}
-              />
+              />              
 
-              <TextField
+              <TextFieldPassword
                 id="password"
                 name="password"
                 value={credential.password}
@@ -271,35 +261,12 @@ class Login extends React.Component {
                   }
                   return changePassword(evt.target.value);
                 }}
-                type={this.state.showPassword ? 'text' : 'password'}
-                fullWidth
-                variant="outlined"
-                margin="dense"
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        color="inherit"
-                        onClick={this.handleClickShowPassword}
-                      >
-                        {this.state.showPassword ? (
-                          <Visibility style={{ color: color.black }} />
-                        ) : (
-                          <VisibilityOff style={{ color: color.grey }} />
-                        )}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-                error={!!this.state.error.password}
-                helperText={this.state.error.password}
-              />
-
-              <TextFieldPassword
                 variant="outlined"
                 margin="dense"
                 fullWidth
                 label={intl.formatMessage(messages.password)}
+                error={!!this.state.error.password}
+                helperText={this.state.error.password}
               />
 
               <BtnCustom

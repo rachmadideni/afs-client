@@ -13,12 +13,22 @@ import {
   setNikAction,
   setEmailAction,
   setNotelpAction,
+  setLoginIdAction
 } from '../App/actions';
 
-import { loginSuccessAction, loginErrorAction } from './actions';
+import { 
+  loginSuccessAction, 
+  loginErrorAction } from './actions';
 
-import { setTokenInStorage, removeTokenInStorage } from './helpers';
+import {
+  resetFormSubmission,
+  resetFormSubmissionSuccess,
+  resetFormSubmissionError
+} from "../FormSubmissionStep/actions";
 
+import { 
+  setTokenInStorage,
+  removeTokenInStorage } from './helpers';
 import messages from './messages';
 
 export function* login() {
@@ -51,6 +61,7 @@ export function* login() {
       yield put(setNikAction(nik));
       yield put(setEmailAction(response.email));
       yield put(setNotelpAction(response.notelp));
+      yield put(setLoginIdAction(response.loginId));
 
       yield put(loginSuccessAction('login berhasil! mengalihkan anda ke halaman user')); // beritahu store
       // yield delay(5000);
@@ -68,6 +79,8 @@ export function* login() {
 export function* logout() {
   try {
     yield call(removeTokenInStorage, 'token');
+    yield put(resetFormSubmission());
+    yield put(resetFormSubmissionSuccess('sukses reset state'))    
     yield delay(3000);
     yield put(loginSuccessAction(null));
   } catch (err) {
@@ -79,6 +92,6 @@ export function* logout() {
 export default function* loginSaga() {
   yield all([
     takeLatest(LOGIN_ACTION, login),
-    takeLatest(REMOVE_AUTH_TOKEN_ACTION, logout),
+    takeLatest(REMOVE_AUTH_TOKEN_ACTION, logout)    
   ]);
 }
