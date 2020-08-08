@@ -1,9 +1,3 @@
-/**
- *
- * FormPengajuan
- *
- */
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -13,18 +7,14 @@ import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 
 import Grid from '@material-ui/core/Grid';
-import FormControl from '@material-ui/core/FormControl';
-import TextField from '@material-ui/core/TextField';
-import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
-import InputLabel from '@material-ui/core/InputLabel';
-import Button from '@material-ui/core/Button';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
-// import { Scrollbars } from 'react-custom-scrollbars';
 
-import Backdrop from '@material-ui/core/Backdrop';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import TextField from 'components/TextField';
+import BtnCustom from 'components/BtnCustom';
+import AppLoader from 'components/AppLoader';
+import UserAgreementLabel from "components/UserAgreementLabel";
+
 import { JENIS_PENGAJUAN } from './constants';
 
 import {
@@ -37,7 +27,7 @@ import {
 import { mapPengajuanAction } from '../FormSubmissionStep/actions';
 
 import messages from './messages';
-import { color, typography } from '../../styles/constants';
+
 import {
   makeSelectPengajuan,
   makeSelectOpsiJenisPengajuan,
@@ -51,24 +41,7 @@ const Wrapper = styled(props => <Grid {...props} />)`
     padding-left: 0px;
     padding-right: 0px;
     padding-top: 10px;
-  }
-`;
-
-const UserAgreementLabel = styled(props => (
-  <FormControlLabel
-    classes={{
-      label: 'label',
-    }}
-    {...props}
-  />
-))`
-  && {
-    .label {
-      width: 100%;
-      font-size: 12px;
-    }
-  }
-`;
+  }`;
 
 class FormPengajuan extends React.Component {
   constructor(props) {
@@ -92,9 +65,9 @@ class FormPengajuan extends React.Component {
         ? opsiJenisPengajuan.filter(item => item.KDPRDK === 1)
         : opsiJenisPengajuan.filter(item => item.KDPRDK === 2);
 
-    const menuItem = filteredSub.map(item => (
+    const menuItem = filteredSub.map((item,i) => (
       <MenuItem
-        key={`item-${item.KDPRDK}`}
+        key={`item-${i}-${item.KDPRDK}`}
         value={item.IDTUJU}
         style={{ fontSize: 14 }}
       >
@@ -109,7 +82,6 @@ class FormPengajuan extends React.Component {
     const { opsiJenisPengajuan } = this.props;
     this.props.changeSubPengajuan(value);
     const selected = opsiJenisPengajuan.filter(item => item.IDTUJU === value);
-    // jika array length > 0
     if (selected.length > 0) {
       const text = selected[0].NMTUJU;
       if (text.includes('lainnya')) {
@@ -157,127 +129,82 @@ class FormPengajuan extends React.Component {
 
     return (
       <Wrapper container wrap="nowrap" direction="column" alignItems="center">
-        <Backdrop
+        <AppLoader
           open={formSubmitted}
-          style={{
-            zIndex: 3000,
-            color: color.white,
-          }}
-        >
-          <CircularProgress color="inherit" />
-        </Backdrop>
+          type="linear"
+          message="Mohon Tunggu"
+        />
 
         <Grid item style={{ width: '100%' }}>
           <form autoComplete="off">
-            <FormControl variant="outlined" margin="dense" fullWidth>
-              <InputLabel color="secondary" shrink>
-                {intl.formatMessage(messages.jenis_manfaat)}
-              </InputLabel>
+            <TextField
+              id="jenpeng"
+              name="jenpeng"
+              select
+              fullWidth
+              label={intl.formatMessage(messages.jenis_manfaat)}
+              variant="outlined"
+              margin="dense"
+              value={pengajuan.jenis}
+              onChange={evt => changeJenisPengajuan(evt.target.value)}
+            >
+              {JENIS_PENGAJUAN.map((item,i) => (
+                <MenuItem key={`JP-${i}`} value={item.value} style={{ fontSize: 14 }}>
+                  {item.text}
+                </MenuItem>
+              ))}
+            </TextField>
 
-              <Select
-                id="jenpeng"
-                name="jenpeng"
-                variant="outlined"
-                margin="dense"
-                color="secondary"
-                labelWidth={115}
-                style={{
-                  fontFamily: typography.fontFamily,
-                  fontSize: 14,
-                }}
-                value={pengajuan.jenis}
-                onChange={evt => changeJenisPengajuan(evt.target.value)}
-              >
-                {JENIS_PENGAJUAN.map(item => (
-                  <MenuItem value={item.value} style={{ fontSize: 14 }}>
-                    {item.text}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-
-            <FormControl variant="outlined" margin="dense" fullWidth>
-              <InputLabel color="secondary" shrink>
-                {intl.formatMessage(messages.pemanfaatan)}
-              </InputLabel>
-              <Select
-                id="subpeng"
-                name="subpeng"
-                variant="outlined"
-                margin="dense"
-                color="secondary"
-                labelWidth={205}
-                style={{
-                  fontFamily: typography.fontFamily,
-                  fontSize: 14,
-                }}
-                value={pengajuan.tujuan}
-                onChange={evt => {
-                  this.handlePemanfaatanLainnya(evt.target.value);
-                }}
-              >
-                {this.renderTujuanPengajuan()}
-              </Select>
-            </FormControl>
-
-            <FormControl margin="dense" fullWidth>
-              <TextField
-                id="lainnya"
-                name="lainnya"
-                color="secondary"
-                fullWidth
-                InputLabelProps={{ shrink: true }}
-                variant="outlined"
-                label={intl.formatMessage(messages.lainnya)}
-                margin="dense"
-                disabled={!this.state.pemanfaatanLainnyaIsActive}
-                value={pengajuan.pemanfaatan_lain}
-                onChange={evt => changePemanfaatanLain(evt.target.value)}
-                style={{
-                  fontFamily: typography.fontFamily,
-                  fontSize: 12,
-                }}
-              />
-            </FormControl>
-
-            <FormControl margin="dense" fullWidth>
-              <UserAgreementLabel
-                color="secondary"
-                label="saya dengan ini menyetujui persyaratan yang berlaku dalam pembiayaan di Amanah Finance Syariah "
-                name="userSetuju"
-                control={
-                  <Checkbox
-                    checked={this.state.userSetuju}
-                    onChange={this.handleAgreement}
-                  />
-                }
-              />
-            </FormControl>
-
-            <Grid
-              item
-              xs
-              style={{
-                paddingTop: 0,
-                justifyContent: 'center',
-                alignItems: 'center',
+            <TextField
+              id="subpeng"
+              name="subpeng"
+              select
+              fullWidth
+              variant="outlined"
+              margin="dense"
+              label={intl.formatMessage(messages.pemanfaatan)}
+              value={pengajuan.tujuan}
+              onChange={evt => {
+                this.handlePemanfaatanLainnya(evt.target.value);
               }}
             >
-              <Button
-                color="primary"
-                variant="contained"
-                fullWidth
-                onClick={this.handleSubmit}
-                disabled={this.checkPengajuanForm(pengajuan)}
-                style={{
-                  fontFamily: typography.fontFamily,
-                  textTransform: 'capitalize',
-                  fontWeight: 'bold',
-                }}
-              >
-                {intl.formatMessage(messages.submit)}
-              </Button>
-            </Grid>
+              {this.renderTujuanPengajuan()}
+            </TextField>
+
+            <TextField
+              id="lainnya"
+              name="lainnya"
+              color="secondary"
+              fullWidth
+              InputLabelProps={{ shrink: true }}
+              variant="outlined"
+              label={intl.formatMessage(messages.lainnya)}
+              margin="dense"
+              disabled={!this.state.pemanfaatanLainnyaIsActive}
+              value={pengajuan.pemanfaatan_lain}
+              onChange={evt => changePemanfaatanLain(evt.target.value)}
+            />
+
+            <UserAgreementLabel
+              color="secondary"
+              label="saya dengan ini menyetujui persyaratan yang berlaku dalam pembiayaan di Amanah Finance Syariah "
+              name="userSetuju"
+              control={
+                <Checkbox
+                  checked={this.state.userSetuju}
+                  onChange={this.handleAgreement}
+                />
+              }
+            />            
+
+            <BtnCustom
+              fullWidth
+              variant="contained"
+              color="primary"
+              disabled={this.checkPengajuanForm(pengajuan)}
+              onClick={this.handleSubmit}
+              title={intl.formatMessage(messages.submit)}
+            />
           </form>
         </Grid>
       </Wrapper>
