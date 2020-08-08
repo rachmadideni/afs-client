@@ -31,6 +31,7 @@ function FormStepper(props) {
     nasabah,
     work,
     documents,
+    opsi_dokumen,
     // pengajuan,
     // tourSimulasi,
   } = props;
@@ -65,11 +66,8 @@ function FormStepper(props) {
   };
 
   const checkDocumentForm = () => {
-    const ktp = documents.uploaded.findIndex(elem => elem.idberk === 3);
-    // const idcard = documents.uploaded.findIndex(elem => elem.idberk === 5);
-    // const npwp = documents.uploaded.findIndex(elem => elem.idberk === 6);
-    // if(ktp > -1 && idcard > -1 && npwp > -1){
-    if (ktp > -1) {
+    // cocokkan jumlah dokumen mayor dgn jumlah dokumen yg diupload
+    if(documents.uploaded.length === opsi_dokumen.length){
       return false;
     }
     return true;
@@ -102,8 +100,11 @@ function FormStepper(props) {
     <Grid
       container
       wrap="nowrap"
+      justify="center"
+      alignItems="center"
       style={{
         marginBottom: 10,
+        // backgroundColor:"yellow"
       }}
     >
       {activeStep > 0 && <StepBackButton active onClickBack={onClickBack} />}

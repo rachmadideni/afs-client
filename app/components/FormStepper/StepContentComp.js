@@ -17,7 +17,7 @@ const WrapperElem = styled(props => {
     flex: 3;
     flex-direction: column;
     justify-content: center;
-    align-items: flex-start;
+    align-items: flex-start;    
   }
 `;
 
@@ -27,6 +27,7 @@ const StepTitle = styled(props => {
   return <Typography {...otherProps}>{title}</Typography>;
 })`
   && {
+    font-family:'IBM Plex Sans';
     font-size: 14px;
     font-weight: bold;
     color: black;
@@ -40,6 +41,7 @@ const StepSubtitle = styled(props => {
   return <Typography {...otherProps}>{subtitle}</Typography>;
 })`
   && {
+    font-family:'IBM Plex Sans';
     font-size: 9px;
     font-weight: bold;
     color: grey;
