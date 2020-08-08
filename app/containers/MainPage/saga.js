@@ -92,7 +92,7 @@ export function* cekPinjaman() {
     // console.log(err);
   }
 }
-
+//#region download akad
 export function* downloadAkad() {
   try {
     const credential = yield select(makeSelectCredential());
@@ -116,7 +116,8 @@ export function* downloadAkad() {
     // throw new Error(err);
   }
 }
-
+//#endregion
+//#region download surat pernyataan nasabah
 export function* downloadSpn() {
   try {
     const credential = yield select(makeSelectCredential());
@@ -140,7 +141,8 @@ export function* downloadSpn() {
     // throw new Error(err);
   }
 }
-
+//#endregion
+//#region download surat rekomendasi pembiayaan
 export function* downloadSrp() {
   try {
     const credential = yield select(makeSelectCredential());
@@ -164,7 +166,8 @@ export function* downloadSrp() {
     throw new Error(err);
   }
 }
-
+//#endregion
+//#region download pernyataan gaji & keterangan kerja
 export function* downloadSpgk() {
   try {
     const credential = yield select(makeSelectCredential());
@@ -188,6 +191,7 @@ export function* downloadSpgk() {
     throw new Error(err);
   }
 }
+//#endregion
 
 export default function* mainPageSaga() {
   yield all([

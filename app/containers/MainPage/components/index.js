@@ -9,7 +9,7 @@ import { color, typography } from '../../../styles/constants';
 
 // Welcome user
 export const WelcomeUser = styled(typographyProps => (
-  <Typography variant="body" align="left" {...typographyProps} />
+  <Typography {...typographyProps} />
 ))`
   line-height:1;
   && {
@@ -21,7 +21,7 @@ export const WelcomeUser = styled(typographyProps => (
 export const SwipeablesHowTo = styled(typographyProps => (
   <Typography
     variant="subtitle1"
-    align="left"
+    align="center"
     gutterBottom
     {...typographyProps}
   />
@@ -84,11 +84,12 @@ export const GridWrapper = styled(props => (
     align-items: center;
     max-width: 330px;
     width: 280px;
+    margin-top:15px;
     padding-top: 10px;
     padding-bottom: 10px;
     padding-left: 10px;
     padding-right: 10px;
-    background-color: ${color.lightGrey};
+    background-color: ${color.white};//lightGrey
     border-radius: 6px;
   }
 `;

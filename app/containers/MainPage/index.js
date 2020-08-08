@@ -1,8 +1,3 @@
-/**
- *
- * MainPage
- *
- */
 import 'swiper/css/swiper.css';
 import Grid from '@material-ui/core/Grid';
 import PropTypes from 'prop-types';
@@ -20,6 +15,8 @@ import injectSaga from 'utils/injectSaga';
 import SectionInformasi from '../SectionInformasi/Loadable';
 import SectionPinjaman from '../SectionPinjaman/Loadable';
 import { cekPinjamanAction, changeStepAction } from './actions';
+import { toggleTour } from "containers/Dashboard/actions";
+import { makeSelectTourState } from "containers/Dashboard/selectors";
 import {
   GridWrapper as SwipeableWrapper,
   SwipeableItem,
@@ -38,14 +35,20 @@ const Wrapper = styled(props => <Grid {...props}>{props.children}</Grid>)`
   && {
     display: flex;
     justify-content: center;
-    align-items: flex-start;
-    // background-color: ${color.white};
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    padding-left:15px;
+    padding-right:15px;
+    // background-color: ${color.green};
   }
 `;
-
 class MainPage extends React.Component {
   constructor(props) {
     super(props);
+    // this.state = {
+    //   isTourOpen:false
+    // }
     this.renderSwipeables = this.renderSwipeables.bind(this);
     this.onSwipeablesClick = this.onSwipeablesClick.bind(this);
   }
@@ -53,6 +56,8 @@ class MainPage extends React.Component {
   componentDidMount() {
     this.props.changeStep(0);
     this.props.cekPinjaman();
+    // this.openTour();
+    // console.log(this.props.history.location.pathname);
   }
 
   componentDidUpdate(prevProps) {
@@ -95,20 +100,31 @@ class MainPage extends React.Component {
     const { intl, history } = this.props;
     return (
       <Wrapper container wrap="nowrap" direction="column">
-        <Grid item>
-          <WelcomeUser>{intl.formatMessage(messages.welcomeUser)}</WelcomeUser>
+        {/* <WelcomeUser 
+            align="left"
+            variant="body2"
+            gutterBottom>{intl.formatMessage(messages.welcomeUser)}</WelcomeUser> */}        
 
-          <SwipeablesHowTo>
+        {/* <SwipeablesHowTo>
             {intl.formatMessage(messages.swipeablesHowTo)}
-          </SwipeablesHowTo>
-
-          <SwipeableWrapper>
-            <Swipeables {...SWIPEABLE_PARAM}>
-              {this.renderSwipeables()}
-            </Swipeables>
-          </SwipeableWrapper>
-        </Grid>
-
+          </SwipeablesHowTo> */}
+      {/* <>
+          <ReactTour 
+            isOpen={this.props.isTourOpen} 
+            steps={[...(this.props.history.location.pathname === "/dashboard/pinjaman" ? [{
+              selector:'[data-tut="first_step"]',
+              content:'dua',
+            }] : [{}] )]}
+            onRequestClose={() => this.props.toggleTour(false)}
+            update={this.props.history.location.pathname}
+            updateDelay={2000} />                
+        </> */}
+        <SwipeableWrapper 
+          data-tut="tut-pengajuan">
+          <Swipeables {...SWIPEABLE_PARAM}>
+            {this.renderSwipeables()}
+          </Swipeables>
+        </SwipeableWrapper>
         <Content item>
           <Switch>
             <Route
@@ -141,12 +157,14 @@ MainPage.propTypes = {
 const mapStateToProps = createStructuredSelector({
   activeStep: makeSelectActiveStep(),
   statusAplikasi: makeSelectStatusAplikasi(),
+  isTourOpen: makeSelectTourState()
 });
 
 function mapDispatchToProps(dispatch) {
   return {
     changeStep: step => dispatch(changeStepAction(step)),
     cekPinjaman: () => dispatch(cekPinjamanAction()),
+    toggleTour: (tourState) => dispatch(toggleTour(tourState)),
   };
 }
 
