@@ -49,6 +49,7 @@ function BottomTabNavigation(props) {
   const { tabs, bottomTabValue, handleBottomTabChange } = props;
   return (
     <BottomNavigationStyled
+    data-tut="tut-navigasi"
       color="primary"
       value={bottomTabValue}
       onChange={handleBottomTabChange}
