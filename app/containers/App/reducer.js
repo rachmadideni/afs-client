@@ -13,7 +13,8 @@ import {
   REMOVE_AUTH_TOKEN_ACTION,
   SET_NIK_ACTION,
   SET_EMAIL_ACTION,
-  SET_NOTELP_ACTION
+  SET_NOTELP_ACTION,
+  SET_LOGINID_ACTION
  } from './constants';
 
 // The initial state of the App
@@ -21,6 +22,7 @@ export const initialState = {
   loading: false,
   auth:{
     token:null,
+    loginId:null,
     nik:null,
     email:null,
     notelp:null
@@ -51,6 +53,9 @@ const appReducer = (state = initialState, action) =>
         draft.auth.notelp = action.payload;
         return draft;
       }
+      case SET_LOGINID_ACTION:
+        draft.auth.loginId = action.payload.loginId;
+        return draft;
     }
     return draft;
   });

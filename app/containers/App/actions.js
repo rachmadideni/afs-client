@@ -22,9 +22,18 @@ import {
   REMOVE_TOKEN_VERIFIKASI_ACTION,
   SET_NIK_ACTION,
   SET_EMAIL_ACTION,
-  SET_NOTELP_ACTION
+  SET_NOTELP_ACTION,
+  SET_LOGINID_ACTION
 } from './constants';
 
+export function setLoginIdAction(loginId){
+  return {
+    type:SET_LOGINID_ACTION,
+    payload:{
+      loginId
+    }
+  }
+}
 
 export function setAuthTokenAction(token){
   return {

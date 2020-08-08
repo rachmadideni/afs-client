@@ -14,6 +14,7 @@ import Verifikasi from 'containers/Verifikasi/Loadable';
 import VerifyConfirmPage from 'containers/VerifyConfirmPage';
 import ForgotPassword from 'containers/ForgotPassword';
 import UserRegistration from '../UserRegistration/Loadable';
+import UserInbox from 'containers/UserInbox';
 
 import './styles.scss';
 
@@ -123,7 +124,7 @@ export default function App() {
               path="/inbox"
               render={routeProps => (
                 <AuthGuard>
-                  <Dashboard {...routeProps} />
+                  <UserInbox {...routeProps} />
                 </AuthGuard>
               )}
             />

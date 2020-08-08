@@ -13,6 +13,7 @@ const makeSelectLocation = () => createSelector(selectRouter, routerState => rou
 const makeSelectNik = () => createSelector(selectGlobal, globalState => globalState.auth.nik);
 const makeSelectEmail = () => createSelector(selectGlobal, globalState => globalState.auth.email);
 const makeSelectNotelp = () => createSelector(selectGlobal, globalState => globalState.auth.notelp);
+const makeSelectLoginId = () => createSelector(selectGlobal, globalState => globalState.auth.loginId);
 
 export {
   makeSelectAuthToken,
@@ -20,7 +21,8 @@ export {
   makeSelectLoading,
   makeSelectNik,
   makeSelectEmail,
-  makeSelectNotelp
+  makeSelectNotelp,
+  makeSelectLoginId
   // selectGlobal,
   // makeSelectCurrentUser,
   // makeSelectError,
