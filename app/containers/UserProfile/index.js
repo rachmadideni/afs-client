@@ -56,6 +56,10 @@ class UserProfile extends React.Component {
         height="100%"
         alignItems="center"
         justifyContent="center"
+        style={{
+          paddingLeft:'15px',
+          paddingRight:'15px'
+        }}
       >
         <Grid
           container
