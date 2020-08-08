@@ -100,7 +100,7 @@ class SectionPinjaman extends React.Component {
                   paddingTop: 10,
                 }}
               >
-                <ActionButton
+                <ActionButton                  
                   variant="outlined"
                   color="primary"
                   fullWidth
@@ -182,8 +182,9 @@ class SectionPinjaman extends React.Component {
                   paddingTop: 10,
                 }}
               >
-                {DAFTAR_DOKUMEN.map(item => (
+                {DAFTAR_DOKUMEN.map((item,i) => (
                   <ActionButton
+                    key={`ab-${i}`}
                     variant="contained"
                     color="primary"
                     fullWidth
