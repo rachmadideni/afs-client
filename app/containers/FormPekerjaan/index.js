@@ -15,11 +15,8 @@ import styled from 'styled-components';
 import validate from 'validate.js';
 
 import Grid from '@material-ui/core/Grid';
-import FormControl from '@material-ui/core/FormControl';
-import TextField from '@material-ui/core/TextField';
-import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
-import InputLabel from '@material-ui/core/InputLabel';
+import TextField from "components/TextField";
 import {
   changeCompanyAction,
   // changeCompanyJoinDateAction,
@@ -120,29 +117,23 @@ class FormPekerjaan extends React.Component {
         }}
       >
         <Grid item style={{ width: '100%' }}>
-          <form autoComplete="off">
-            <FormControl variant="outlined" margin="dense" fullWidth>
-              <InputLabel color="secondary" shrink>
-                {intl.formatMessage(messages.company)}
-              </InputLabel>
-              <Select
-                id="company"
-                name="company"
-                value={work.company}
-                fullWidth
-                onChange={evt => {
-                  this.checkJenisProduk(evt.target.value);
-                }}
-                error={!!this.state.error.company}
-                helpertext={this.state.error.company}
-                variant="outlined"
-                margin="dense"
-                color="secondary"
-                labelWidth={110}
-                style={{
-                  textTransform: 'lowercase',
-                }}
-              >
+          <form autoComplete="off">            
+            <TextField 
+              id="company"
+              name="company"
+              select
+              value={work.company}
+              fullWidth
+              InputLabelProps={{ shrink: true }}
+              onChange={evt => {
+                this.checkJenisProduk(evt.target.value);
+              }}
+              error={!!this.state.error.company}
+              helpertext={this.state.error.company}
+              variant="outlined"
+              margin="dense"
+              color="secondary"
+              label={intl.formatMessage(messages.company)}>
                 {opsiSbu.map(sbu => (
                   <MenuItem
                     key={`${sbu.title}-${sbu.IDSBU}`}
@@ -154,25 +145,7 @@ class FormPekerjaan extends React.Component {
                     {sbu.NMSBU}
                   </MenuItem>
                 ))}
-              </Select>
-            </FormControl>
-
-            {/* <FormControl variant="outlined" margin="dense" fullWidth>
-              <TextField
-                id="companyJoinDate"
-                name="companyJoinDate"
-                type="date"
-                value={work.companyJoinDate}
-                onChange={evt => changeCompanyJoinDate(evt.target.value)}
-                fullWidth
-                color="secondary"
-                InputLabelProps={{ shrink: true }}
-                label={intl.formatMessage(messages.companyJoinDate)}
-                labelwidth={110}
-                variant="outlined"
-                margin="dense"
-              />
-            </FormControl> */}
+            </TextField>            
 
             {/* pake input tahun bekerja */}
             <TextField
@@ -187,39 +160,7 @@ class FormPekerjaan extends React.Component {
               fullWidth
               color="secondary"
               variant="outlined"
-              margin="dense"
-            />
-
-            {/* pake opsi */}
-            {/* <FormControl variant="outlined" margin="dense" fullWidth>
-              <InputLabel color="secondary" shrink>
-                {"lama bekerja"}
-              </InputLabel>
-              <Select
-                id="opsi_lama_kerja"
-                name="opsi_lama_kerja"
-                value={work.workingYears}
-                fullWidth
-                onChange={evt => { this.checkJenisProduk(evt.target.value); }}
-                error={!!this.state.error.company}
-                helpertext={this.state.error.company}
-                variant="outlined"
-                margin="dense"
-                color="secondary"
-                labelWidth={110}
-                style={{
-                  textTransform: 'Capitalize',
-                }}>
-                {WORKING_YEARS_OPTIONS.map(item => (
-                  <MenuItem
-                    key={`${item.id}`}
-                    value={item.id}
-                    style={{ textTransform: 'Capitalize' }}>
-                    {item.ketera}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl> */}
+              margin="dense" />           
           </form>
         </Grid>
       </Wrapper>
