@@ -22,7 +22,8 @@ function CustomInput(props) {
     margin="dense" 
     style={{ 
       textAlign:'right',
-      fontWeight:'bold'
+      fontWeight:'bold',
+      backgroundColor:'white'
     }}
     {...props} />;
 }
