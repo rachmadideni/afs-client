@@ -1,0 +1,14 @@
+@import "../../styles/colors.scss";
+.cardContent {
+  padding:25px 10px 0px 10px;
+}
+.avatarBadge {
+  position:absolute;
+  top:-20px;
+  left:0px;
+  border:solid 2px $lightGrey;  
+}
+
+.noTransition {
+  transition: none;
+}

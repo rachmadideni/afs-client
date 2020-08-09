@@ -1,0 +1,30 @@
+@import "../../styles/colors.scss";
+.dialogPaper {
+  border-radius:8px;
+}
+.dialogContent {
+  display: flex;
+  direction:row;
+  justify-content: space-around;
+  align-items: flex-start;
+  background-color: $lightGrey;
+  border-radius:8px;
+  padding:0px 15px 5px 15px;
+}
+
+.dialogActions {  
+  justify-content:center;
+  align-items: center;
+  background-color: $lightGrey;
+  border-radius:8px;
+}
+
+.dialogTypography {
+  font-size:12px;
+  font-weight: bold;
+  line-height: 1.2;
+}
+
+.avatarWrapper {
+  margin-right:10px;
+}
