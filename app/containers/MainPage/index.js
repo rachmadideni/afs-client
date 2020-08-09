@@ -100,11 +100,12 @@ class MainPage extends React.Component {
     const { intl, history } = this.props;
     return (
       <Wrapper container wrap="nowrap" direction="column">
-        {/* <WelcomeUser 
+        <WelcomeUser 
             align="left"
             variant="body2"
-            gutterBottom>{intl.formatMessage(messages.welcomeUser)}</WelcomeUser> */}        
-
+            gutterBottom>
+            {intl.formatMessage(messages.menuUtama)}
+        </WelcomeUser>
         {/* <SwipeablesHowTo>
             {intl.formatMessage(messages.swipeablesHowTo)}
           </SwipeablesHowTo> */}

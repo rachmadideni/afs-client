@@ -13,9 +13,9 @@ export default defineMessages({
     id: `${scope}.header`,
     defaultMessage: 'This is the MainPage container!',
   },
-  welcomeUser: {
-    id: `${scope}.welcomeUser`,
-    defaultMessage: 'Hai, Selamat Datang di Amanah Finance Syariah',
+  menuUtama: {
+    id: `${scope}.menuUtama`,
+    defaultMessage: 'Menu',
   },
   swipeablesHowTo: {
     id: `${scope}.swipeablesHowTo`,
