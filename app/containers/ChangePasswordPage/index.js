@@ -17,7 +17,8 @@ import injectReducer from 'utils/injectReducer';
 
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import TextField from '@material-ui/core/TextField';
+import TextField from "components/TextField";
+// import TextField from '@material-ui/core/TextField';
 // import FormControl from '@material-ui/core/FormControl';
 // import Backdrop from '@material-ui/core/Backdrop';
 // import CircularProgress from '@material-ui/core/CircularProgress';
@@ -49,7 +50,7 @@ const Wrapper = styled(props => <Grid {...props}>{props.children}</Grid>)`
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    background-color: ${color.white};
+    // background-color: ${color.white};
     padding-left:15px;
     padding-right:15px;
   }
