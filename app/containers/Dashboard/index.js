@@ -199,7 +199,8 @@ class Dashboard extends React.Component {
             )}
           />
         </Switch>            
-        <BottomTabNavigation              
+        <BottomTabNavigation
+          tourSelectorId="tut-navigasi"              
           tabs={this.getBottomTabs()}
           bottomTabValue={this.state.bottomTabValue}
           handleBottomTabChange={this.handleBottomTabChange}
