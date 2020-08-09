@@ -14,7 +14,7 @@ import {
 } from "@material-ui/core";
 
 import BtnCustom from "components/BtnCustom";
-import CSAvatar from "../../images/demimoore.jpg";
+import CSAvatar from "../../images/rsz_csavatar.jpg";
 import "./styles.scss";
 
 export const steps = [{
