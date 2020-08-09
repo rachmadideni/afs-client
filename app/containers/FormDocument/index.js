@@ -31,6 +31,7 @@ import {
   makeSelectUploadedFiles,
 } from '../FormSubmissionStep/selectors';
 
+// import FileType from "file-type";
 const Wrapper = styled(props => <Grid {...props} />)`
   && {
     background-color: transparent;
@@ -139,8 +140,16 @@ class FormDocument extends React.Component {
     });
 
   handleFile = (event, idberk) => {
+    let allowedType = ['image/png','image/jpg','image/jpeg'];
     if (!!event.target.files && !!event.target.files[0]) {
-      // console.log(event.target.files);
+      console.log(event.target.files[0]);
+      let fileType = event.target.files[0].type;      
+      if(allowedType.indexOf(fileType) === -1){
+        alert('file tidak didukung');
+        // show notification error
+        // return false;
+        // console.log(allowedType.indexOf(fileType));
+      }
       const objectURL = URL.createObjectURL(event.target.files[0]);
       const file = event.target.files[0];
       return this.props.upload(idberk, file, objectURL);
@@ -186,8 +195,8 @@ class FormDocument extends React.Component {
         container
         wrap="nowrap"
         direction="column"
-        alignItems="flex-end"
-        justify="flex-end"
+        alignItems="center"
+        justify="center"
       >
         <Grid item>
           <form autoComplete="off">
@@ -292,15 +301,17 @@ class FormDocument extends React.Component {
               container
               wrap="wrap"
               direction="row"
-              justify="space-between"
-              alignItems="flex-start"
+              justify="center"
+              alignItems="center"
             >
               {this.props.uploadedFiles.map((item, index) => (
-                <Grid item style={{ marginBottom: 15 }}>
+                // <Grid item style={{ marginBottom: 10 }}>
                   <Grid
                     style={{
                       marginTop: 12,
-                      width: '130px',
+                      // width: '130px',
+                      // width:'180px',
+                      width:'100%',
                       height: '120px',
                     }}
                   >
@@ -315,7 +326,7 @@ class FormDocument extends React.Component {
                       </CardActionArea>
                     </Card>
                   </Grid>
-                </Grid>
+                // </Grid>
               ))}
               {this.state.photo && (
                 <Grid item style={{ marginBottom: 15 }}>
