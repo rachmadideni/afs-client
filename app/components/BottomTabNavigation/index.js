@@ -46,10 +46,10 @@ const NavigationAction = styled(BottomNavigationAction).attrs({
 `;
 
 function BottomTabNavigation(props) {
-  const { tabs, bottomTabValue, handleBottomTabChange } = props;
+  const { tabs, bottomTabValue, handleBottomTabChange, tourSelectorId } = props;
   return (
     <BottomNavigationStyled
-    data-tut="tut-navigasi"
+      data-tut={tourSelectorId}
       color="primary"
       value={bottomTabValue}
       onChange={handleBottomTabChange}
