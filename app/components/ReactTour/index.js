@@ -24,14 +24,14 @@ export const steps = [{
   stepInteraction:false  
 },{
   selector:'[data-tut="tut-pengajuan"]',
-  content:'ini adalah menu cepat untuk mengakses layanan di AFS. swipe untuk berpindah menu',
+  content:'ini adalah menu untuk mengakses layanan di AFS. swipe kiri dan kanan untuk berpindah menu',
   position:'top'
 },{
   selector:'[data-tut="tut-notif"]',
-  content:'untuk melihat notifikasi singkat'
+  content:'tombol ini digunakan untuk melihat pemberitahuan/notifikasi dari kami'
 },{
   selector:'[data-tut="tut-setting"]',
-  content:'untuk merubah pengaturan aplikasi klik disini'
+  content:'tombol ini digunakan untuk merubah pengaturan aplikasi'
 }];
 
 const ReactTour = props => {      
@@ -62,7 +62,7 @@ const CustomHelper = ({ current, content, totalSteps, gotoStep, close }) => {
         {content}
         </Typography>        
       </CardContent>
-      <CardActions>
+      <CardActions className="cardActions">
         {current > 0 && <BtnCustom variant="outlined" size="small" color="primary" title="sebelumnya" onClick={()=>gotoStep(current-1)} />}
         {current < totalSteps -1 && <BtnCustom variant="outlined" size="small" color="primary" title="selanjutnya" onClick={()=>gotoStep(current+1)} />}
         {current === totalSteps -1 && <BtnCustom variant="outlined" size="small" color="primary" title="tutup" onClick={()=>close()}/>}

@@ -129,7 +129,7 @@ class Dashboard extends React.Component {
             <AppHeaderIcon src={afsImage} />
             <div style={{ flexGrow:1 }} />
             <AppHeaderNotification 
-              count={1}
+              count={0}
               onClick={()=>this.goToInbox()} />
             <AppHeaderSettings />                        
           </AppToolbar>
