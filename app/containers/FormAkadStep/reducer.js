@@ -106,6 +106,7 @@ const formAkadStepReducer = (state = initialState, action) =>
         return draft;
       
       case GET_OPSI_KELURAHAN_SUCCESS_ACTION:{
+        draft.isLoading = false;
         draft.opsi.kelurahan = action.payload;
         return draft;
       }
