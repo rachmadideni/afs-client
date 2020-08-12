@@ -9,7 +9,11 @@ function removeTokenInStorage(tokenKey){
 }
 
 function setTokenVerifikasi(token){
+    // if(store.get('token_verifikasi') !== token){
+    //     store.remove('token_verifikasi');
+    // }
     store.set('token_verifikasi', token);
+    // return false;
 }
 
 function removeTokenVerifikasi(tokenKey){
@@ -21,16 +25,14 @@ function getTokenAuthFromStorage(){
     return store.get('token');
 }
 
-// function getTokenVerifikasiFromStorage(){
-//     const token = store.get('token_verifikasi'); 
-//     return token;
-// }
-
+const getTokenVerifikasiFromStorage = () => store.get('token_verifikasi');
+const getTokenByKey = tokenKey => store.get(tokenKey);
 export {
     setTokenInStorage,
     removeTokenInStorage,
     setTokenVerifikasi,
     removeTokenVerifikasi,
     getTokenAuthFromStorage,
-    // getTokenVerifikasiFromStorage
+    getTokenVerifikasiFromStorage,
+    getTokenByKey
 }
