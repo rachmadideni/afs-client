@@ -33,6 +33,8 @@ import {
   makeSelectOpsiJenisPengajuan,
   makeSelectFormSubmitted,
   // makeSelectNasabah,
+  makeSelectProgressMessage,
+  makeSelectProgressValue
 } from '../FormSubmissionStep/selectors';
 
 const Wrapper = styled(props => <Grid {...props} />)`
@@ -133,6 +135,8 @@ class FormPengajuan extends React.Component {
           open={formSubmitted}
           type="linear"
           message="Mohon Tunggu"
+          progress_message={this.props.progressMessage}
+          progress_value={this.props.progressValue}
         />
 
         <Grid item style={{ width: '100%' }}>
@@ -228,6 +232,8 @@ const mapStateToProps = createStructuredSelector({
   pengajuan: makeSelectPengajuan(),
   opsiJenisPengajuan: makeSelectOpsiJenisPengajuan(),
   formSubmitted: makeSelectFormSubmitted(),
+  progressMessage:makeSelectProgressMessage(),
+  progressValue:makeSelectProgressValue()
   // nasabah: makeSelectNasabah(),
 });
 
