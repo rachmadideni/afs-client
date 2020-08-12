@@ -10,6 +10,7 @@ import {
   clearError
 } from './actions';
 import { makeSelectUser } from "./selectors";
+import { setTokenVerifikasi } from "../Login/helpers";
 import { replace } from 'connected-react-router';
 
 export function* registrasi(){
@@ -31,6 +32,7 @@ export function* registrasi(){
     const response = yield call(request, endpoint, requestOpt);
     // console.log(response);
     if(response.status){
+      yield call(setTokenVerifikasi, response.token_verifikasi);
       yield put(registrasiSukses(response.token_verifikasi,response.kode_verifikasi,response.message));
     } else {
       yield put(registrasiError(response.message, response.user))

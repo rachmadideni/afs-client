@@ -6,8 +6,19 @@ import { compose } from 'redux';
 
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
-import { makeSelectUser, makeSelectError, makeSelectSuccess, makeSelectIsLoading } from './selectors';
-import { changeInputAction, registrasi, clearError, clearSuccess, mintaKodeAktifasi } from './actions';
+import {
+  makeSelectUser,
+  makeSelectError,
+  makeSelectSuccess,
+  makeSelectIsLoading,
+} from './selectors';
+import {
+  changeInputAction,
+  registrasi,
+  clearError,
+  clearSuccess,
+  mintaKodeAktifasi,
+} from './actions';
 import reducer from './reducer';
 import saga from './saga';
 import messages from './messages';
@@ -45,31 +56,33 @@ class UserRegistration extends React.Component {
       },
       isSubmitTriggered: false,
       isErrorNotification: false,
-      isSuccessNotification: false
+      isSuccessNotification: false,
     };
   }
 
   // #region error checking
-  componentDidUpdate(prevProps){
-    
-    if(!!this.props.error.message && prevProps.error.message === null){      
+  componentDidUpdate(prevProps) {
+    if (!!this.props.error.message && prevProps.error.message === null) {
       this.setState({
-        isErrorNotification:true
-      })      
-    } else if(!!prevProps.error.message && this.props.error.message === null){      
+        isErrorNotification: true,
+      });
+    } else if (!!prevProps.error.message && this.props.error.message === null) {
       this.setState({
-        isErrorNotification:false
-      })
+        isErrorNotification: false,
+      });
     }
 
-    if(!!this.props.success.message && prevProps.success.message === null){
+    if (!!this.props.success.message && prevProps.success.message === null) {
       this.setState({
-        isSuccessNotification:true
-      })
-    } else if(!!prevProps.success.message && this.props.success.message === null){
+        isSuccessNotification: true,
+      });
+    } else if (
+      !!prevProps.success.message &&
+      this.props.success.message === null
+    ) {
       this.setState({
-        isSuccessNotification:false
-      })
+        isSuccessNotification: false,
+      });
     }
   }
   // #endregion
@@ -173,10 +186,10 @@ class UserRegistration extends React.Component {
   };
   // #endregion
 
-  handleRouteChanges = (route) => {
+  handleRouteChanges = route => {
     const { history } = this.props;
     history.replace(route);
-  }
+  };
 
   // #region handle jika user klik tombol arrow back
   handleBack = () => {
@@ -184,16 +197,12 @@ class UserRegistration extends React.Component {
     return history.replace('/login');
   };
   // #endregion
-  
 
   render() {
     const { intl, changeInput, user, error, success } = this.props;
     return (
       <Wrapper container wrap="nowrap" direction="column">
-        <PageAppBar
-          appTitle="Login"
-          backHandler={() => this.handleBack()}
-        />
+        <PageAppBar appTitle="Login" backHandler={() => this.handleBack()} />
         <AppBox>
           <AppLoader
             open={this.props.isLoading}
@@ -213,29 +222,32 @@ class UserRegistration extends React.Component {
             message={
               <React.Fragment>
                 {`${error.message} `}
-                {
-                  error.user && error.user.NEMAIL !== user.email ? (<React.Fragment></React.Fragment>)
-                  : error.user && error.user.STATUS === 0 ? 
-                  (<Typography display="inline">
+                {error.user && error.user.NEMAIL !== user.email ? (
+                  <React.Fragment />
+                ) : error.user && error.user.STATUS === 0 ? (
+                  <Typography display="inline">
                     <Link onClick={() => this.props.mintaKodeAktifasi()}>
                       {intl.formatMessage(messages.btnResendKodeVerifikasi)}
                     </Link>
-                  </Typography>) 
-                : error.user && error.user.STATUS === 1 ? 
-                (<Typography display="inline">
-                    <Link onClick={() => this.handleRouteChanges('/resetPassword')}>
+                  </Typography>
+                ) : error.user && error.user.STATUS === 1 ? (
+                  <Typography display="inline">
+                    <Link
+                      onClick={() => this.handleRouteChanges('/resetPassword')}
+                    >
                       {intl.formatMessage(messages.LinkForgotPassword)}
                     </Link>
-                  </Typography>)
-                : <></>
-              }
+                  </Typography>
+                ) : (
+                  <></>
+                )}
               </React.Fragment>
             }
             notificationType="warning"
           />
 
-          <NotificationSnackbar 
-            verticalPos="top" 
+          <NotificationSnackbar
+            verticalPos="top"
             notificationType="success"
             hideDuration={5000}
             message={success.message}
@@ -247,7 +259,8 @@ class UserRegistration extends React.Component {
               this.props.clearError();
               this.props.clearSuccess();
               this.handleRouteChanges('/verifikasi/confirm');
-            }} />
+            }}
+          />
 
           <PaperCustom width={90} elevation={0}>
             <PaperTitle variant="h6" align="left">
@@ -256,83 +269,84 @@ class UserRegistration extends React.Component {
             <PaperSubtitle color="inherit" align="left">
               {intl.formatMessage(messages.subtitle)}
             </PaperSubtitle>
+            <form autoComplete="off">
+              <TextField
+                id="nik"
+                name="nik"
+                type="text"
+                label={intl.formatMessage(messages.nik)}
+                placeholder={intl.formatMessage(messages.placeholderNIK)}
+                value={user.nik}
+                fullWidth
+                variant="outlined"
+                margin="dense"
+                onChange={evt => {
+                  if (this.state.isSubmitTriggered) {
+                    this.validateNik(evt.target.value);
+                  }
+                  return changeInput('nik', evt.target.value);
+                }}
+                error={!!this.state.error.nik}
+                helperText={this.state.error.nik}
+              />
 
-            <TextField
-              id="nik"
-              name="nik"
-              type="text"
-              label={intl.formatMessage(messages.nik)}
-              placeholder={intl.formatMessage(messages.placeholderNIK)}
-              value={user.nik}
-              fullWidth
-              variant="outlined"
-              margin="dense"
-              onChange={evt => {
-                if (this.state.isSubmitTriggered) {
-                  this.validateNik(evt.target.value);
+              <TextField
+                id="email"
+                name="email"
+                label={intl.formatMessage(messages.email)}
+                placeholder={intl.formatMessage(messages.placeholderEmail)}
+                value={user.email}
+                type="email"
+                fullWidth
+                variant="outlined"
+                margin="dense"
+                onChange={evt => {
+                  if (this.state.isSubmitTriggered) {
+                    this.validateEmail(evt.target.value);
+                  }
+                  return changeInput('email', evt.target.value);
+                }}
+                error={!!this.state.error.email}
+                helperText={this.state.error.email}
+              />
+
+              <TextField
+                id="nomtel"
+                name="nomtel"
+                label={intl.formatMessage(messages.nomorTelpon)}
+                placeholder={intl.formatMessage(
+                  messages.placeholderNoHandphone,
+                )}
+                value={user.nomtel}
+                type="number"
+                fullWidth
+                variant="outlined"
+                margin="dense"
+                onChange={evt => {
+                  if (this.state.isSubmitTriggered) {
+                    this.validateTelpon(evt.target.value);
+                  }
+                  return changeInput('nomtel', evt.target.value);
+                }}
+                error={!!this.state.error.nomorTelpon}
+                helperText={this.state.error.nomorTelpon}
+              />
+
+              <BtnCustom
+                fullWidth
+                variant="contained"
+                color="primary"
+                disabled={
+                  !!this.state.error.email ||
+                  !!this.state.error.nik ||
+                  !!this.state.error.nomorTelpon
                 }
-                return changeInput('nik', evt.target.value);
-              }}
-              error={!!this.state.error.nik}
-              helperText={this.state.error.nik}
-            />
-
-            <TextField
-              id="email"
-              name="email"
-              label={intl.formatMessage(messages.email)}
-              placeholder={intl.formatMessage(messages.placeholderEmail)}
-              value={user.email}
-              type="email"
-              fullWidth
-              variant="outlined"
-              margin="dense"
-              onChange={evt => {
-                if (this.state.isSubmitTriggered) {
-                  this.validateEmail(evt.target.value);
-                }
-                return changeInput('email', evt.target.value);
-              }}
-              error={!!this.state.error.email}
-              helperText={this.state.error.email}
-            />
-
-            <TextField
-              id="nomtel"
-              name="nomtel"
-              label={intl.formatMessage(messages.nomorTelpon)}
-              placeholder={intl.formatMessage(
-                messages.placeholderNoHandphone,
-              )}
-              value={user.nomtel}
-              type="number"
-              fullWidth
-              variant="outlined"
-              margin="dense"
-              onChange={evt => {
-                if (this.state.isSubmitTriggered) {
-                  this.validateTelpon(evt.target.value);
-                }
-                return changeInput('nomtel', evt.target.value);
-              }}
-              error={!!this.state.error.nomorTelpon}
-              helperText={this.state.error.nomorTelpon}
-            />
-
-            <BtnCustom
-              fullWidth
-              variant="contained"
-              color="primary"
-              disabled={
-                !!this.state.error.email ||
-                !!this.state.error.nik ||
-                !!this.state.error.nomorTelpon
-              }
-              onClick={this.handleSubmit}
-              disableElevation
-              endIcon={<ArrowForward />}
-              title={intl.formatMessage(messages.btnVerifikasi)}
-            />
+                onClick={this.handleSubmit}
+                disableElevation
+                endIcon={<ArrowForward />}
+                title={intl.formatMessage(messages.btnVerifikasi)}
+              />
+            </form>
           </PaperCustom>
         </AppBox>
       </Wrapper>
@@ -340,20 +354,20 @@ class UserRegistration extends React.Component {
   }
 }
 
-const mapStateToProps = createStructuredSelector({  
+const mapStateToProps = createStructuredSelector({
   user: makeSelectUser(),
   error: makeSelectError(),
   success: makeSelectSuccess(),
-  isLoading: makeSelectIsLoading()
+  isLoading: makeSelectIsLoading(),
 });
 
 function mapDispatchToProps(dispatch) {
-  return {    
+  return {
     changeInput: (key, value) => dispatch(changeInputAction(key, value)),
     registrasi: () => dispatch(registrasi()),
     clearError: () => dispatch(clearError()),
     clearSuccess: () => dispatch(clearSuccess()),
-    mintaKodeAktifasi: () => dispatch(mintaKodeAktifasi())
+    mintaKodeAktifasi: () => dispatch(mintaKodeAktifasi()),
   };
 }
 
