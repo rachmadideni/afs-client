@@ -2,6 +2,8 @@
 
 .backdrop {
   z-index:3000;
+  // background-color: lighten(black,20%);
+  opacity:0.1;
   color:$white;
 }
 

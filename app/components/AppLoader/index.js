@@ -29,7 +29,7 @@ const AppLoader = ({
   message = 'mohon tunggu',
   ...props
 }) => {
-  const [progressValue, setProgressValue] = React.useState(15);
+  // const [progressValue, setProgressValue] = React.useState(15);
   const renderProgress = () => {
     if (type === 'circular') {
       return <CircularProgress color="inherit" />;
@@ -41,12 +41,13 @@ const AppLoader = ({
               variant="body2"
               align="center"
               className="progressTitle">
-              {PROGRESS.map(item => item.value === progressValue ? item.title : null )}
+              {/* {PROGRESS.map(item => item.value === progressValue ? item.title : null )} */}
+              {props.progress_message}
             </Typography>
             <LinearProgress
-              color={progressValue < 101 ? "primary" : "secondary"}
+              color={props.progress_value < 101 ? "primary" : "secondary"}
               variant="determinate"
-              value={progressValue}
+              value={props.progress_value}
             />
           </Box>
         </Box>
