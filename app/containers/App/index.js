@@ -36,11 +36,7 @@ export default function App() {
 
             <Route exact path="/verifikasi" component={Verifikasi} />
 
-            <Route
-              exact
-              path="/verifikasi/confirm"
-              component={VerifyConfirmPage}
-            />
+            <Route exact path="/verifikasi/confirm" component={VerifyConfirmPage} />
 
             <Route exact path="/registrasi" component={UserRegistration} />
 
