@@ -14,18 +14,16 @@ import { compose } from 'redux';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 
-// import {
-//   getTokenVerifikasiFromStorage
-// } from '../Login/helpers';
+import { getTokenVerifikasiFromStorage } from '../Login/helpers';
 
-import Box from '@material-ui/core/Box';
-import Typography from '@material-ui/core/Typography';
 import FormControl from '@material-ui/core/FormControl';
 
 // custom components
 import ReactCodeInput from 'react-code-input';
 import NotificationSnackbar from 'components/NotificationSnackbar';
 import PaperCustom from 'components/PaperCustom';
+import AppBox from 'components/AppBox';
+import AppLoader from 'components/AppLoader';
 
 import {
   Wrapper,
@@ -102,6 +100,16 @@ class VerifyConfirmPage extends React.Component {
       },
       successNotified: false,
     };
+  }
+
+  componentDidMount(){
+    // console.log(this.props.history);
+    let token = getTokenVerifikasiFromStorage();
+    if(token){
+      let isTokenExpired = this.isTokenExpired();
+      let decoded = jwtDecode(token);
+      console.log(decoded);
+    }
   }
 
   componentDidUpdate(prevProps) {
@@ -232,12 +240,7 @@ class VerifyConfirmPage extends React.Component {
     return (
       <Wrapper container wrap="nowrap" direction="column">
         <PageAppBar appTitle="Login" backHandler={() => this.handleBack()} />
-        <Box
-          display="flex"
-          width="100%"
-          height="100%"
-          alignItems="center"
-          justifyContent="center">
+        <AppBox>                
           <PaperCustom width={90} elevation={0}>
             <form autoComplete="off">
               <PaperTitle variant="h6" align="left">
@@ -286,8 +289,8 @@ class VerifyConfirmPage extends React.Component {
                 notificationType="success"
               />
             </form>
-          </PaperCustom>
-        </Box>
+          </PaperCustom>        
+        </AppBox>
       </Wrapper>
     );
   }
