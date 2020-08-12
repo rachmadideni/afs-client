@@ -24,7 +24,8 @@ const idkecm = () => createSelector(formAkadDomain, substate => substate.data.id
 const idkelr = () => createSelector(formAkadDomain, substate => substate.data.idkelr);
 
 const makeSelectIsLoading = () => createSelector(formAkadDomain, substate => substate.isLoading);
-
+const makeSelectProgressMessage = () => createSelector(formAkadDomain, substate => substate.progress_simpan.message);
+const makeSelectProgressValue = () => createSelector(formAkadDomain, substate => substate.progress_simpan.value);
 export default makeSelectFormAkadStep;
 export {
   formAkadData,
@@ -43,5 +44,7 @@ export {
   idkota,
   idkecm,
   idkelr,
-  makeSelectIsLoading
+  makeSelectIsLoading,
+  makeSelectProgressMessage,
+  makeSelectProgressValue
 };

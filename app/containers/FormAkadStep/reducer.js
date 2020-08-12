@@ -27,7 +27,8 @@ import {
   CHANGE_KELURAHAN_ACTION,
   RESET_FORM_SUCCESS_ACTION,
   SUBMIT_FORM_AKAD_ACTION,
-  SUBMIT_FORM_AKAD_SUCCESS_ACTION
+  SUBMIT_FORM_AKAD_SUCCESS_ACTION,
+  UPDATE_PROGRESS_SIMPAN
 } from './constants';
 
 export const initialState = {
@@ -50,6 +51,10 @@ export const initialState = {
     kota:[],
     kecamatan:[],
     kelurahan:[]
+  },
+  progress_simpan:{
+    value:0,
+    message:null
   }
 };
 
@@ -180,6 +185,11 @@ const formAkadStepReducer = (state = initialState, action) =>
       case SUBMIT_FORM_AKAD_SUCCESS_ACTION:
         draft.isLoading = false;
         return draft;
+      
+      case UPDATE_PROGRESS_SIMPAN:{
+        draft.progress_simpan.message = action.payload.message;
+        draft.progress_simpan.value = action.payload.value;
+      }
     }
     return draft;
   });

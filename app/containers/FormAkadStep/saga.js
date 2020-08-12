@@ -1,4 +1,4 @@
-import { call, put, select, all, takeLatest, takeEvery } from 'redux-saga/effects';
+import { call, put, select, all, takeLatest, delay } from 'redux-saga/effects';
 import request from 'utils/request';
 import { api } from 'environments';
 import { replace } from 'connected-react-router';
@@ -33,12 +33,12 @@ import {
   getOpsiKecamatanSuccessAction,
   getOpsiKelurahanSuccessAction,
   submitFormAkadSuccessAction,
-  resetFormSuccessAction
+  resetFormSuccessAction,
+  updateProgressSimpan
 } from './actions';
 
-import {
-  mapping_form_akad
-} from './helpers'
+import { mapping_form_akad } from './helpers'
+import Compressor from "compressorjs";
 
 export function* getOpsiDokumen(){
   try {
@@ -183,9 +183,20 @@ export function* getNomrek(nobase){
 export function* uploadFiles(files){
     
   const endpoint = `${api.host}/api/upload_dokumen`;  
-  const formData = new FormData();
+  let compressedFile = files.file;
+  compressedFile = yield new Promise((resolve,reject)=>{
+    new Compressor(files.file, {
+      success: result => {
+        resolve(result);
+      },
+      error:reject,
+      quality:0.6
+    });
+  }).then(result=>result)
+  .catch(()=>files.file);
 
-  formData.append('file', files.file, files.file.name);//file.name
+  const formData = new FormData();
+  formData.append('file', compressedFile, files.file.name);//file.name
   formData.append('DOK_ID',files.idberk);    
   formData.append('nomrek', files.nomrek);
   
@@ -224,19 +235,25 @@ export function* submitFormAkad(){
     }
 
     const response = yield call(request, endpoint, requestOpt);
-    
+    yield put(updateProgressSimpan(25,"mempersiapkan data dan melakukan check ulang!"));
     if(response.status){
       const nomrek = yield call(getNomrek, nobase);   
-      yield all(uploadedFiles.map(item => {
-        return call(uploadFiles, {...item, nomrek })
-      }));
-      yield put(submitFormAkadSuccessAction());
-      yield put(resetFormSuccessAction(initialState.data)); // reset state data
-      yield put(replace('/summary'));
+      yield put(updateProgressSimpan(50,"menyimpan data form tahap ke 2"));
+      if(yield all(uploadedFiles.map(item => call(uploadFiles, {...item, nomrek }) ))){
+        yield put(updateProgressSimpan(75,"meng-upload dokumen"));
+        yield delay(5000);
+        yield put(updateProgressSimpan(100, "selesai"));
+        yield put(submitFormAkadSuccessAction());
+        yield put(resetFormSuccessAction(initialState.data)); // reset state data
+        yield put(replace('/summary'));
+      } else {
+        console.log('gagal upload')
+      }
     }
 
   } catch(err){
     console.log(err);
+    throw new Error(err)
   }
 }
 

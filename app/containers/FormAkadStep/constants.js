@@ -44,3 +44,5 @@ export const STS_KWN = [{
     'ID':2,
     'NMSTAT':'menikah'
 }]
+
+export const UPDATE_PROGRESS_SIMPAN = 'app/FormAkadStep/UPDATE_PROGRESS_SIMPAN';

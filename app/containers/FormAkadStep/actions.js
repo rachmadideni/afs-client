@@ -28,8 +28,17 @@ import {
   CHANGE_KECAMATAN_ACTION,
   CHANGE_KELURAHAN_ACTION,
   RESET_FORM_ACTION,
-  RESET_FORM_SUCCESS_ACTION
+  RESET_FORM_SUCCESS_ACTION,
+  UPDATE_PROGRESS_SIMPAN
 } from './constants';
+
+export const updateProgressSimpan = (value, message) => ({
+  type: UPDATE_PROGRESS_SIMPAN,
+  payload: {
+    value,
+    message
+  }
+});
 
 export const changePropinsiAction = (idprop) => ({
   type: CHANGE_PROPINSI_ACTION,
