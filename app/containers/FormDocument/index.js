@@ -23,6 +23,7 @@ import Backdrop from '@material-ui/core/Backdrop';
 
 // import { createBlob, createObjectURL, base64StringToBlob } from 'blob-util';
 import Camera from 'react-webcam';
+import Viewer from 'react-viewer';
 import { color, typography } from '../../styles/constants';
 import { getOpsiDokumenTahap1Action, uploadAction } from './actions';
 
@@ -41,7 +42,7 @@ const Wrapper = styled(props => <Grid {...props} />)`
   }
 `;
 
-const CardMediaStyled = styled(CardMedia)`
+const CardMediaStyled = styled(props => <CardMedia {...props} />)`
   && {
     height: 120px;
   }
@@ -86,6 +87,8 @@ class FormDocument extends React.Component {
       isPhotoCaptured: false,
       photo: null,
       orientation: 'portrait',
+      isImageViewerOpen: false,
+      activeImageIndex: 0
     };
     this.cameraRef = React.createRef();
   }
@@ -101,9 +104,12 @@ class FormDocument extends React.Component {
 
   componentWillUnmount() {
     // console.log(this.cameraRef.current)
+    // #region buat listener perubahan orientasi layar
     window.removeEventListener('orientationchange', this.setOrientation, false);
+    // #endregion
   }
 
+  // #region apply perubahan orientasi layar
   setOrientation = () => {
     if (window.matchMedia('(orientation:portrait)').matches) {
       this.setState({
@@ -118,6 +124,7 @@ class FormDocument extends React.Component {
       });
     }
   };
+  // #endregion
 
   // onSingleUpload( evt, statename, statefile){
   //   let file = evt.target.files[0];
@@ -146,6 +153,7 @@ class FormDocument extends React.Component {
       let fileType = event.target.files[0].type;      
       if(allowedType.indexOf(fileType) === -1){
         alert('file tidak didukung');
+        return false;
         // show notification error
         // return false;
         // console.log(allowedType.indexOf(fileType));
@@ -176,16 +184,22 @@ class FormDocument extends React.Component {
     const photo = this.cameraRef.current.getScreenshot(); // return as base64
     const canvas = this.cameraRef.current.getCanvas(); // return as canvas
 
-    canvas.toBlob(blob => {
-      // console.log(blob);
+    canvas.toBlob(blob => {      
       const fileFromBlob = blobToFile(blob, 'foto-selfie.png');
       const objectURLFromBlob = URL.createObjectURL(fileFromBlob);
-      // console.log(fileFromBlob)
+      
       this.setState({ photo });
       this.props.upload(8, fileFromBlob, objectURLFromBlob);
       this.toggleCameraBackdrop();
     });
   };
+
+  // getImages = () => {
+  //   let images = [];
+  //   return this.props.uploadedFiles.map(item => images.push(({ src:item.objectURL })) );
+  //   // console.log(images)
+  //   // return images;
+  // }
 
   render() {
     const { opsiDokumenTahap1 } = this.props;
@@ -201,7 +215,7 @@ class FormDocument extends React.Component {
         <Grid item>
           <form autoComplete="off">
             {opsiDokumenTahap1
-              .filter(doc => doc.IDBERK < 8)
+              //.filter(doc => doc.IDBERK < 8)
               .map(item => (
                 <FormControl
                   key={`upload-${item.IDBERK}`}
@@ -228,8 +242,7 @@ class FormDocument extends React.Component {
                   </Button>
                 </FormControl>
               ))}
-            {/* Tombol Selfie */}
-            {/* di disable sementara karena https belum jalan */}
+            {/* Tombol Selfie di disable sementara karena https belum jalan */}
             {/* <FormControl margin="dense" fullWidth>
               <Button
                 color="primary"
@@ -304,9 +317,9 @@ class FormDocument extends React.Component {
               justify="center"
               alignItems="center"
             >
-              {this.props.uploadedFiles.map((item, index) => (
-                // <Grid item style={{ marginBottom: 10 }}>
+              {this.props.uploadedFiles.map((item, index) => (                
                   <Grid
+                    key={`grid-berkas-${index}`}
                     style={{
                       marginTop: 12,
                       // width: '130px',
@@ -317,7 +330,15 @@ class FormDocument extends React.Component {
                   >
                     <Card raised={false}>
                       <CardActionArea>
-                        <CardMediaStyled image={`${item.objectURL}`} />
+                        <CardMediaStyled 
+                          image={`${item.objectURL}`} 
+                          onClick={ 
+                            () => { 
+                              this.setState({ 
+                                isImageViewerOpen: true,
+                                activeImageIndex:index
+                              });                              
+                            }} />
                         <Overlay>
                           <TextOverlay>
                             {opsiDokumenTahap1[index].NMBERK}
@@ -328,6 +349,22 @@ class FormDocument extends React.Component {
                   </Grid>
                 // </Grid>
               ))}
+
+              {/* test react-viewer */}
+              {
+                this.props.uploadedFiles.length > 0 && 
+                <Viewer 
+                  visible={this.state.isImageViewerOpen} 
+                  onClose={()=>this.setState({ isImageViewerOpen:false })}                
+                  images={[{
+                    src:this.props.uploadedFiles[this.state.activeImageIndex].objectURL
+                    //this.props.uploadedFiles.map( (item) => ({ src:item.objectURL }) )
+                  }]} 
+                  zIndex={8000}
+                  />              
+              }
+
+              {/* hasil foto selfie */}
               {this.state.photo && (
                 <Grid item style={{ marginBottom: 15 }}>
                   <Grid
