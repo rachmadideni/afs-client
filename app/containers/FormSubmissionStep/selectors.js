@@ -50,6 +50,8 @@ const makeSelectOpsiJenisPengajuan = () => createSelector(selectFormSubmissionSt
 
 const makeSelectTourSimulasi = () => createSelector(selectFormSubmissionStepDomain, substate => substate.data.tour_simulasi); 
 const makeSelectFormSubmitted = () => createSelector(selectFormSubmissionStepDomain, substate => substate.formSubmitted);
+const makeSelectProgressMessage = () => createSelector(selectFormSubmissionStepDomain, substate => substate.progress_simpan.message);
+const makeSelectProgressValue = () => createSelector(selectFormSubmissionStepDomain, substate => substate.progress_simpan.value);
 
 export { 
   makeSelectCompletedStep,
@@ -88,5 +90,7 @@ export {
   makeSelectCifData,
   makeSelectFinanceData,
   makeSelectTourSimulasi,
-  makeSelectFormSubmitted
+  makeSelectFormSubmitted,
+  makeSelectProgressMessage,
+  makeSelectProgressValue
 };

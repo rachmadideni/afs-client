@@ -16,7 +16,8 @@ import {
   SET_SIMULASI_TOUR_ACTION,
   RESET_FORM_SUBMISSION,
   RESET_FORM_SUBMISSION_SUCCESS,
-  RESET_FORM_SUBMISSION_ERROR
+  RESET_FORM_SUBMISSION_ERROR,
+  UPDATE_PROGRESS_SIMPAN
 } from './constants';
 
 // CONSTANT ANGSURAN
@@ -185,6 +186,10 @@ export const initialState = {
   },
   send: {},
   formSubmitted: false,
+  progress_simpan:{
+    value:0,
+    message:null
+  },
   opsi: {
     param: null,
     jenis_kelamin: [],
@@ -268,13 +273,18 @@ const formSubmissionStepReducer = (state = initialState, action) =>
       }
 
       case SUBMIT_PENGAJUAN_ACTION: {
-        draft.formSubmitted = true;
+        draft.formSubmitted = true;        
         return draft;
       }
 
       case SUBMIT_PENGAJUAN_SUCCESS_ACTION: {
-        draft.formSubmitted = false;
+        draft.formSubmitted = false;        
         return draft;
+      }
+
+      case UPDATE_PROGRESS_SIMPAN:{
+        draft.progress_simpan.message = action.payload.message;
+        draft.progress_simpan.value = action.payload.value;
       }
 
       case CHANGE_GAJI_ACTION: {

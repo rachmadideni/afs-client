@@ -22,8 +22,17 @@ import {
   BUAT_DIREKTORI_UPLOAD_ERROR,
   RESET_FORM_SUBMISSION,
   RESET_FORM_SUBMISSION_SUCCESS,
-  RESET_FORM_SUBMISSION_ERROR
+  RESET_FORM_SUBMISSION_ERROR,
+  UPDATE_PROGRESS_SIMPAN
 } from './constants';
+
+export const updateProgressSimpan = (value, message) => ({
+  type: UPDATE_PROGRESS_SIMPAN,
+  payload: {
+    value,
+    message
+  }
+});
 
 export const resetFormSubmission = () => ({
   type: RESET_FORM_SUBMISSION

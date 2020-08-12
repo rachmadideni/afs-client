@@ -1,4 +1,4 @@
-import { put, select, call, all, takeLatest, takeEvery } from 'redux-saga/effects';
+import { put, select, call, all, takeLatest, takeEvery, delay } from 'redux-saga/effects';
 import request from 'utils/request';
 import { api } from 'environments';
 import { replace } from 'connected-react-router';
@@ -82,8 +82,9 @@ import {
   submitPengajuanSuccessAction,
   resetFormSuccessAction,
   buatDirektoriUploadSukses,
-  buatDirektoriUploadError
+  buatDirektoriUploadError,
   // insertCifSuccessAction,
+  updateProgressSimpan  
 } from './actions';
 // #endregion
 
@@ -302,6 +303,7 @@ export function* uploadFiles(files) {
   };
 
   try {
+    // console.log(compressedFile, files);
     const response = yield call(request, endpoint, requestOpt);
     return response;
   } catch (err) {
@@ -346,7 +348,8 @@ export function* mapPengajuan() {
     const nomhp1 = yield select(makeSelectNotelp());
     const loginId = yield select(makeSelectLoginId());
 
-    yield put(submitPengajuanAction()); // formSubmitted = true
+    yield put(submitPengajuanAction()); // loader mohon tunggu aktif formSubmitted = true
+    yield put(updateProgressSimpan(25, "mempersiapkan data dan melakukan check ulang!"));
     yield put(
       mapPengajuanSuccessAction({
         nobase,
@@ -369,6 +372,7 @@ export function* mapPengajuan() {
     };
     
     // ambil state setelah mapping diformSubmissionStep.send  
+    
     const cifData = yield select(makeSelectCifData());
     const financeData = yield select(makeSelectFinanceData());    
     
@@ -378,20 +382,32 @@ export function* mapPengajuan() {
       ...defaultColumns,
     });
 
+    
     if (cifResponse.status && financeResponse.status) {
-      const nomrek = yield call(getNomrek, nobase.nik);
-    //   // upload file ke server
+      const nomrek = yield call(getNomrek, nobase.nik);          
+      yield put(updateProgressSimpan(50,"menyimpan data pengajuan"));
+      // let nomrek = "20010003";
       const buatDirektoriUploadResponse = yield call(buatDirektoriUpload, nomrek);
+      // console.log(buatDirektoriUploadResponse);
       if(buatDirektoriUploadResponse.status){
-        yield put(buatDirektoriUploadSukses(buatDirektoriUploadResponse.message));
-        yield all(files.map(item => call(uploadFiles, { ...item, nomrek })));
-        yield put(submitPengajuanSuccessAction()); // formSubmitted = false
-        yield put(resetFormSuccessAction(initialState));
-        yield put(replace('/summary'));
+        yield put(buatDirektoriUploadSukses(buatDirektoriUploadResponse.message));        
+        if(yield all(files.map(item => call(uploadFiles, { ...item, nomrek }) ))){
+          // console.log('berhasil upload!');      
+          yield put(updateProgressSimpan(75,"meng-upload dokumen"));
+          yield delay(5000);
+          yield put(updateProgressSimpan(100, "selesai"));
+          yield put(submitPengajuanSuccessAction()); // formSubmitted = false
+          yield put(resetFormSuccessAction(initialState));
+          yield put(replace('/summary'));
+        } else {
+          console.log('gagal upload');
+        }        
       } else {
         yield put(buatDirektoriUploadError(buatDirektoriUploadResponse.message));
       }
     }
+
+
   } catch (err) {
     // console.log(err);
     throw new Error(err);
@@ -399,8 +415,7 @@ export function* mapPengajuan() {
 }
 // #endregion
 // #region buat direktori upload
-export function* buatDirektoriUpload(nomrek){
-  
+export function* buatDirektoriUpload(nomrek){    
     const token = yield select(makeSelectAuthToken());
     const endpoint = `${api.host}/api/buat_direktori`;
     const requestOpt = {
@@ -409,7 +424,9 @@ export function* buatDirektoriUpload(nomrek){
         'Content-Type': 'application/json',
         Authorization: token,
       },
-      body: JSON.stringify(nomrek),
+      body: JSON.stringify({
+        nomrek
+      }),
     };
     
     try {

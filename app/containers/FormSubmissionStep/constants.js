@@ -52,3 +52,5 @@ export const BUAT_DIREKTORI_UPLOAD_ERROR = 'app/FormSubmissionStep/BUAT_DIREKTOR
 export const RESET_FORM_SUBMISSION = 'app/FormSubmissionStep/RESET_FORM_SUBMISSION';
 export const RESET_FORM_SUBMISSION_SUCCESS = 'app/FormSubmissionStep/RESET_FORM_SUBMISSION_SUCCESS';
 export const RESET_FORM_SUBMISSION_ERROR = 'app/FormSubmissionStep/RESET_FORM_SUBMISSION_ERROR';
+
+export const UPDATE_PROGRESS_SIMPAN = 'app/FormSubmissionStep/UPDATE_PROGRESS_SIMPAN';
