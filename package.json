@@ -103,6 +103,7 @@
     "react-router-dom": "5.0.0",
     "react-swipe": "^6.0.4",
     "react-timeago": "^4.4.0",
+    "react-viewer": "^3.2.2",
     "react-webcam": "^5.0.0",
     "reactour": "^1.16.1",
     "read-blob": "^1.1.0",
