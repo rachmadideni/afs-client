@@ -1,23 +1,15 @@
-import { takeLatest, call, put, select } from 'redux-saga/effects';
+import { takeLatest, call, put, select, delay } from 'redux-saga/effects';
 import request from 'utils/request';
 import { api } from 'environments';
 import { replace } from 'connected-react-router';
-import {
-  KONFIRMASI_KODE_ACTION
-} from './constants'
+import { KONFIRMASI_KODE_ACTION } from './constants';
+
 import {
   konfirmasiKodeSuccessAction,
-  konfirmasiKodeErrorAction,
-  logErrorAction
+  konfirmasiKodeErrorAction  
 } from './actions';
 
-// import {
-//   makeSelectUser
-// } from '../Verifikasi/selectors';
-
-import {
-  makeSelectUser
-} from "../UserRegistration/selectors";
+import { makeSelectUser } from "../UserRegistration/selectors";
 
 export function* konfirmasiKode(){
   const { nik } = yield select(makeSelectUser());
@@ -32,14 +24,15 @@ export function* konfirmasiKode(){
       nik
     })
   };
-  try {
-    // call api untuk update TGAKTIFASI & STATUS
-    yield call(request, endpoint, requestOpt);
-    // konfirmasi_verifikasi    
-    yield put(konfirmasiKodeSuccessAction());
-    yield put(replace('/createPassword'));
-    
-
+  try {    
+    const response = yield call(request, endpoint, requestOpt);
+    if(response.status){
+      yield put(konfirmasiKodeSuccessAction(response.message));
+      yield delay(2000);
+      yield put(replace('/createPassword'));
+    } else {
+      yield put(konfirmasiKodeErrorAction(response.message));
+    }    
   } catch(err){
     yield put(konfirmasiKodeErrorAction(err));
   }

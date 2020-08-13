@@ -57,6 +57,7 @@ import {
   makeSelectKodeFromServer,
   makeSelectError,
   makeSelectSuccess,
+  makeSelectIsLoading
 } from './selectors';
 
 import { makeSelectKodeAktifasi } from "../UserRegistration/selectors";
@@ -227,20 +228,24 @@ class VerifyConfirmPage extends React.Component {
     this.setState(state => ({
       ...state,
       successNotified: true,
-      confirm: {
-        ...state.confirm,
-        successMessage: intl.formatMessage(messages.codeIsMatch),
-      },
+      // confirm: {
+      //   ...state.confirm,
+      //   successMessage: intl.formatMessage(messages.codeIsMatch),
+      // },
     }));
   };
   //#endregion
 
   render() {
-    const { intl } = this.props;
+    const { intl, isLoading } = this.props;
     return (
       <Wrapper container wrap="nowrap" direction="column">
         <PageAppBar appTitle="Login" backHandler={() => this.handleBack()} />
-        <AppBox>                
+        <AppBox>
+          <AppLoader
+            open={isLoading}
+            type="circular"
+            message="Mohon Tunggu" />
           <PaperCustom width={90} elevation={0}>
             <form autoComplete="off">
               <PaperTitle variant="h6" align="left">
@@ -314,11 +319,11 @@ const mapStateToProps = createStructuredSelector({
   kodeVerifikasi: makeSelectKodeVerifikasi(),
   errorMessage: makeSelectError(),
   successMessage: makeSelectSuccess(),
+  isLoading: makeSelectIsLoading()
 });
 
 function mapDispatchToProps(dispatch) {
-  return {
-    // dispatch,
+  return {    
     changeKodeAktifasi: kode => dispatch(changeKodeAktifasiAction(kode)),
     konfirmasiKode: () => dispatch(konfirmasiKodeAction()),
     logError: err => dispatch(logErrorAction(err)),

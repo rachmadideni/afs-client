@@ -68,9 +68,10 @@ export function konfirmasiKodeAction(){
   }
 }
 
-export function konfirmasiKodeSuccessAction(){
+export function konfirmasiKodeSuccessAction(message){
   return {
-    type:KONFIRMASI_KODE_SUCCESS_ACTION
+    type:KONFIRMASI_KODE_SUCCESS_ACTION,
+    payload:message
   }
 }
 
