@@ -23,10 +23,10 @@ import reducer from './reducer';
 import saga from './saga';
 import messages from './messages';
 
-import TextField from '@material-ui/core/TextField';
+import TextField from "components/TextField";
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
-import { ArrowForward } from '@material-ui/icons';
+import ArrowForward from '@material-ui/icons/ArrowForward';
 
 import AppBox from 'components/AppBox';
 import AppLoader from 'components/AppLoader';
