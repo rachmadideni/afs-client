@@ -1,6 +1,6 @@
 export default {
     api: {
-      host:'http://103.77.205.59:8080',    
+      host:'http://103.77.205.90:8080',    
       version: '1',
     },
     // chatbot: {
