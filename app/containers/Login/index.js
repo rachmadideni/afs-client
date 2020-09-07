@@ -46,6 +46,7 @@ import {
 } from './selectors';
 
 import Wallpaper from 'components/Wallpaper';
+import logoAFS from "../../images/AFS3.png";
 
 class Login extends React.Component {
   constructor(props) {
@@ -180,10 +181,14 @@ class Login extends React.Component {
         <AppBar position="sticky">
           <Toolbar>
             <AppTitle gutterBottom>
-              {intl.formatMessage(messages.appTitle)}
+              {/* {intl.formatMessage(messages.appTitle)} */}
             </AppTitle>
           </Toolbar>
         </AppBar>
+
+        <div style={{ flexGrow:1, backgroundColor:'transparent', paddingTop:35 }}>
+          <img src={logoAFS} style={{ width:150, height: 45 }} />
+        </div>
 
         <AppBox>
           <AppLoader
@@ -201,6 +206,8 @@ class Login extends React.Component {
             notificationType="success"
           />
 
+        
+        
           <PaperCustom
             elevation={0}
             style={{ marginLeft: 20, marginRight: 20 }}

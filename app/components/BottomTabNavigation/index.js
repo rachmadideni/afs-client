@@ -14,7 +14,7 @@ import { color } from '../../styles/constants';
 const BottomNavigationStyled = styled(BottomNavigation)`
   && {
     // background-color: ${color.toska['400']};
-    background-color: ${color.biru['400']};
+    background-color: ${color.green};
     position: fixed;
     width: 100%;
     bottom: 0px;

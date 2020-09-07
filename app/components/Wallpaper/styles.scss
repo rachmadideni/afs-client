@@ -1,8 +1,10 @@
 $redBgImage: url('../../images/wave-red-bg.png'); 
+$greyBgImage: url('../../images/wave-grey-bg.png');
+$greenBgImage: url('../../images/wave-green-bg.png');
 .wallpaper {
   flex: 1;
   position: relative;
-  background-image: $redBgImage;
+  background-image: $greenBgImage;
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;

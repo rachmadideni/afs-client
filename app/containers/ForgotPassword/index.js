@@ -47,6 +47,8 @@ import isEmpty from 'validator/lib/isEmpty';
 import isEmail from 'validator/lib/isEmail';
 import { cekNikDanEmail, logSuccessMessage, logErrorMessage, simpanPassword } from './actions';
 
+import logoAFS from "../../images/AFS3.png";
+
 const styles = makeStyles(() => ({
   header: {
     fontFamily: typography.fontFamily,
@@ -273,9 +275,13 @@ class ForgotPassword extends React.Component {
     return (
       <Wrapper container wrap="nowrap" direction="column">
         <PageAppBar appTitle="Login" backHandler={() => this.handleBack()} />
+        <div style={{ flexGrow:1, backgroundColor:'transparent', paddingTop:35 }}>
+          <img src={logoAFS} style={{ width:150, height: 45 }} />
+        </div>
         <Box
           display="flex"
           width="100%"
+          height="100%"
           alignItems="center"
           justifyContent="center"
         >

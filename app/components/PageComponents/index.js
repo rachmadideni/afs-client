@@ -10,13 +10,17 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { color, typography } from '../../styles/constants';
 import background from '../../images/wave-red-bg.png';
+import redBgImage from '../../images/wave-red-bg.png';
+import greyBgImage from '../../images/wave-grey-bg.png';
+import greenBgImage from '../../images/wave-green-bg.png';
+
 import { ArrowBack, ArrowForward } from '@material-ui/icons';
 
 const Wrapper = styled(Grid)`
   && {
     flex: 1;
     position: relative;
-    background-image: url(${background});
+    background-image: url(${greenBgImage});
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;

@@ -45,6 +45,8 @@ import NotificationSnackbar from 'components/NotificationSnackbar';
 import isEmpty from 'validator/lib/isEmpty';
 import isEmail from 'validator/lib/isEmail';
 
+import logoAFS from "../../images/AFS3.png";
+
 class UserRegistration extends React.Component {
   constructor(props) {
     super(props);
@@ -203,6 +205,9 @@ class UserRegistration extends React.Component {
     return (
       <Wrapper container wrap="nowrap" direction="column">
         <PageAppBar appTitle="Login" backHandler={() => this.handleBack()} />
+        <div style={{ flexGrow:1, backgroundColor:'transparent', paddingTop:35 }}>
+          <img src={logoAFS} style={{ width:150, height: 45 }} />
+        </div>
         <AppBox>
           <AppLoader
             open={this.props.isLoading}
